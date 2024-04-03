@@ -96,6 +96,15 @@ public class UserService : IUserService
         return _mapper.Map<UserDTO>(userDto);
     }
 
+    public async Task<UserDTO> FirstOrDefaultAsync(Func<UserDTO, bool> expression)
+    {
+        var expressionMapped = _mapper.Map<Func<User, bool>>(expression);
+
+        var resultMapped = await _repositories.UserRepository.FirstOrDefaultAsync(expressionMapped);
+
+        return _mapper.Map<UserDTO>(resultMapped);
+    }
+
     #endregion
 
 }

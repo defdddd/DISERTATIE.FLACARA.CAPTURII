@@ -44,6 +44,15 @@ public class PhotoService : IPhotoService
         return _mapper.Map<List<PhotoDTO>>(photos);
     }
 
+    public async Task<PhotoDTO> FirstOrDefaultAsync(Func<PhotoDTO, bool> expression)
+    {
+        var expressionMapped = _mapper.Map<Func<Photo, bool>>(expression);
+
+        var resultMapped = await _repositories.PhotoRepository.FirstOrDefaultAsync(expressionMapped);
+
+        return _mapper.Map<PhotoDTO>(resultMapped);
+    }
+
     public async Task<PhotoDTO> InsertEntityAsync(PhotoDTO value)
     {
         var existingPhoto = await _repositories.PhotoRepository.FirstOrDefaultAsync(x => x.PhotoUrl == value.PhotoUrl && x.UserId == value.UserId);

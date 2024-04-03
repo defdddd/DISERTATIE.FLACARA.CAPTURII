@@ -45,6 +45,15 @@ public class ReviewService : IReviewService
         return _mapper.Map<List<ReviewDTO>>(reviews);
     }
 
+    public async Task<ReviewDTO> FirstOrDefaultAsync(Func<ReviewDTO, bool> expression)
+    {
+        var expressionMapped = _mapper.Map<Func<Review, bool>>(expression);
+
+        var resultMapped = await _repositories.ReviewRepository.FirstOrDefaultAsync(expressionMapped);
+
+        return _mapper.Map<ReviewDTO>(resultMapped);
+    }
+
     public async Task<ReviewDTO> InsertEntityAsync(ReviewDTO value)
     {
         var existingReview = await _repositories.ReviewRepository.FirstOrDefaultAsync(x => x.Text == value.Text && x.UserId == value.UserId);

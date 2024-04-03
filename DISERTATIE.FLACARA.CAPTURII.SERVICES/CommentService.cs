@@ -34,45 +34,54 @@ public class CommentService : ICommentService
 
     public async Task<bool> DeleteEntityAsync(CommentDTO value)
     {
-        var Comment = _mapper.Map<Comment>(value);
-        return await _repositories.CommentRepository.DeleteAsync(Comment);
+        var comment = _mapper.Map<Comment>(value);
+        return await _repositories.CommentRepository.DeleteAsync(comment);
     }
 
     public async Task<List<CommentDTO>> Entities()
     {
-        var Comments = await _repositories.CommentRepository.GetAllAsync();
-        return _mapper.Map<List<CommentDTO>>(Comments);
+        var comments = await _repositories.CommentRepository.GetAllAsync();
+        return _mapper.Map<List<CommentDTO>>(comments);
+    }
+
+    public async Task<CommentDTO> FirstOrDefaultAsync(Func<CommentDTO, bool> expression)
+    {
+        var expressionMapped = _mapper.Map<Func<Comment, bool>>(expression);
+
+        var resultMapped = await _repositories.CommentRepository.FirstOrDefaultAsync(expressionMapped);
+
+        return _mapper.Map<CommentDTO>(resultMapped);
     }
 
     public async Task<CommentDTO> InsertEntityAsync(CommentDTO value)
     {
         await Validate.FluentValidate(_validator, value);
 
-        var Comment = _mapper.Map<Comment>(value);
+        var comment = _mapper.Map<Comment>(value);
 
-        var insertedComment = await _repositories.CommentRepository.InsertAsync(Comment);
+        var insertedComment = await _repositories.CommentRepository.InsertAsync(comment);
         return _mapper.Map<CommentDTO>(insertedComment);
     }
 
     public async Task<CommentDTO> SearchEntityByIdAsync(int id)
     {
-        var CommentDto = await _repositories.CommentRepository.SearchByIdAsync(id);
-        return _mapper.Map<CommentDTO>(CommentDto);
+        var commentDto = await _repositories.CommentRepository.SearchByIdAsync(id);
+        return _mapper.Map<CommentDTO>(commentDto);
     }
 
     public async Task<CommentDTO> UpdateEntityAsync(CommentDTO value)
     {
-        var CommentSearch = await _repositories.CommentRepository.SearchByIdAsync(value.Id);
+        var commentSearch = await _repositories.CommentRepository.SearchByIdAsync(value.Id);
 
-        if (CommentSearch == null)
+        if (commentSearch == null)
         {
             throw new ValidationException("Comment does not exist");
         }
 
         await Validate.FluentValidate(_validator, value);
 
-        var Comment = await _repositories.CommentRepository.UpdateAsync(_mapper.Map<Comment>(value));
-        return _mapper.Map<CommentDTO>(Comment);
+        var comment = await _repositories.CommentRepository.UpdateAsync(_mapper.Map<Comment>(value));
+        return _mapper.Map<CommentDTO>(comment);
     }
 
     #endregion

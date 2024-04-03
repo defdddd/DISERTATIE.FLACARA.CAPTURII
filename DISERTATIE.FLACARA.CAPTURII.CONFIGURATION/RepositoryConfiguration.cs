@@ -8,7 +8,7 @@ public static class RepositoryConfiguration
 {
     public static IServiceCollection AddRepositoryConfiguration(this IServiceCollection services, IConfiguration config)
     {
-        services.AddSingleton<IDataAccess>(new DataAccess(config.GetConnectionString("DataBase") ?? throw new ArgumentNullException("config")));
+        services.AddSingleton<IDataAccess>(new DataAccess(config.GetConnectionString("DB") ?? string.Empty));
 
         services.AddSingleton<IDataFactory, DataFactory>();
 
