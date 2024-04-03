@@ -7,7 +7,19 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="12.0.1" />
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="7.5.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\DISERTATIE.FLACARA.CAPTURII.DATAACCESS\DISERTATIE.FLACARA.CAPTURII.DATAACCESS.csproj" />
+    <ProjectReference Include="..\DISERTATIE.FLACARA.CAPTURII.DTO\DISERTATIE.FLACARA.CAPTURII.DTO.csproj" />
     <ProjectReference Include="..\DISERTATIE.FLACARA.CAPTURII.UTILS\DISERTATIE.FLACARA.CAPTURII.UTILS.csproj" />
+    <ProjectReference Include="..\DISERTATIE.FLACARA.CAPTURII.VALIDATORS\DISERTATIE.FLACARA.CAPTURII.VALIDATORS.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Email\" />
   </ItemGroup>
 
 </Project>
