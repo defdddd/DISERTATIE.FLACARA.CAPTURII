@@ -8,14 +8,8 @@ using System.Threading.Tasks;
 
 namespace DISERTATIE.FLACARA.CAPTURII.DTO;
 
-public record UserDTO
+public record UserDTO : RegisterUserDTO
 {
-    public required int Id { get; set; }
-    public required string UserName { get; set; }
-    public required string Password { get; set; }
-    public required string Email { get; set; }
-    public required string FirstName { get; set; }
-    public required string LastName { get; set; }
     public string ProfilePicture { get; set; }
     public string City { get; set; }
     public Gender Gender { get; set; }

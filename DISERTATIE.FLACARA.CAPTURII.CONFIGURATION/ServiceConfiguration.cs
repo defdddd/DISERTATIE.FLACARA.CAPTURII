@@ -17,15 +17,15 @@ public static class ServiceConfiguration
 {
     public static IServiceCollection AddServiceConfiguration(this IServiceCollection services, IConfiguration config)
     {
-        services.AddTransient<ICommentService, CommentService>();
+        services.AddScoped<ICommentService, CommentService>();
 
-        services.AddTransient<IPhotoService, PhotoService>();
+        services.AddScoped<IPhotoService, PhotoService>();
 
-        services.AddTransient<IReviewService, ReviewService>();
+        services.AddScoped<IReviewService, ReviewService>();
 
-        services.AddTransient<IUserService, UserService>();
+        services.AddScoped<IUserService, UserService>();
 
-        services.AddTransient<IServiceAuthentification>
+        services.AddScoped<IServiceAuthentification>
             (
                provider => new ServiceAuthentication
                             (

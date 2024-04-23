@@ -9,5 +9,6 @@ namespace DISERTATIE.FLACARA.CAPTURII.UTILS;
 public enum Gender
 {
     Male,
-    Female
+    Female,
+    Other
 }
