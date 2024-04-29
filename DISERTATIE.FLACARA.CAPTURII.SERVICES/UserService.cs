@@ -28,9 +28,9 @@ public class UserService : IUserService
 
     #region Crud Methods
 
-    public async Task<bool> DeleteEntityAsync(UserDTO value)
+    public async Task<bool> DeleteEntityAsync(int id)
     {
-        var user = _mapper.Map<User>(value);
+        var user = await _repositories.UserRepository.FirstOrDefaultAsync(x => x.Id == id);
         return await _repositories.UserRepository.DeleteAsync(user);
     }
 

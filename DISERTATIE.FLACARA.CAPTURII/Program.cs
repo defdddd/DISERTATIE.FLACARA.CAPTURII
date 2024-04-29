@@ -1,4 +1,5 @@
 using DISERTATIE.FLACARA.CAPTURII.CONFIGURATION;
+using Microsoft.Extensions.FileProviders;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -8,6 +9,7 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.ValidationConfiguration();
 builder.Services.AddRepositoryConfiguration(builder.Configuration);
 builder.Services.AddMapperConfiguration();
 builder.Services.AddServiceConfiguration(builder.Configuration);
@@ -21,9 +23,25 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseCors(x => x
+   .WithOrigins(builder.Configuration.GetConnectionString("CorsLocation"), "http://localhost:4201")
+   .AllowAnyMethod()
+   .AllowAnyHeader());
+
 app.UseHttpsRedirection();
 
+app.UseAuthentication();
+
 app.UseAuthorization();
+
+app.UseStaticFiles
+    (
+        new StaticFileOptions
+        {
+            FileProvider = new PhysicalFileProvider(Path.Combine(builder.Environment.ContentRootPath, "Images")),
+            RequestPath = "/Images"
+        }
+    );
 
 app.MapControllers();
 

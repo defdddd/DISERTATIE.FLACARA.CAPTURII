@@ -32,9 +32,9 @@ public class PhotoService : IPhotoService
 
     #region Crud Methods
 
-    public async Task<bool> DeleteEntityAsync(PhotoDTO value)
+    public async Task<bool> DeleteEntityAsync(int id)
     {
-        var photo = _mapper.Map<Photo>(value);
+        var photo = await _repositories.PhotoRepository.FirstOrDefaultAsync(x => x.Id == id);
         return await _repositories.PhotoRepository.DeleteAsync(photo);
     }
 
@@ -55,10 +55,10 @@ public class PhotoService : IPhotoService
 
     public async Task<PhotoDTO> InsertEntityAsync(PhotoDTO value)
     {
-        var existingPhoto = await _repositories.PhotoRepository.FirstOrDefaultAsync(x => x.PhotoUrl == value.PhotoUrl && x.UserId == value.UserId);
-        if (existingPhoto != null)
+
+        if (string.IsNullOrEmpty(value.URL))
         {
-            throw new ValidationException("Photo already exists");
+            throw new ValidationException("Invalid Photo");
         }
 
         await Validate.FluentValidate(_validator, value);

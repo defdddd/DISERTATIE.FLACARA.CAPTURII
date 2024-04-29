@@ -32,9 +32,9 @@ public class CommentService : ICommentService
 
     #region Crud Methods
 
-    public async Task<bool> DeleteEntityAsync(CommentDTO value)
+    public async Task<bool> DeleteEntityAsync(int id)
     {
-        var comment = _mapper.Map<Comment>(value);
+        var comment = await _repositories.CommentRepository.FirstOrDefaultAsync(x => x.Id == id);
         return await _repositories.CommentRepository.DeleteAsync(comment);
     }
 

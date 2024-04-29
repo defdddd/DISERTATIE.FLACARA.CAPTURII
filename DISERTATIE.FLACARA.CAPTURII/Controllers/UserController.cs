@@ -77,15 +77,12 @@ public class UserController : ControllerBase
     {
         try
         {
-            //var user = new UserDTO();
-
-            //return Ok(await _userService.DeleteEntityAsync(user));
+            return Ok(await _userService.DeleteEntityAsync(id));
         }
         catch (Exception e)
         {
             return BadRequest(e.Message);
         }
-        return BadRequest();
     }
 
     #endregion

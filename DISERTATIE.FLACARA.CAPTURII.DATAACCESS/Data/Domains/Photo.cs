@@ -13,6 +13,8 @@ public class Photo
     [ExplicitKey]
     public required int Id { get; set; }
     public required int UserId { get; set; }
-    public required string PhotoUrl { get; set; }
-    public required string Description { get; set; }
+    public required string URL { get; set; }
+    public required string Type { get; set; }
+    public string FileName { get; set; }
+
 }

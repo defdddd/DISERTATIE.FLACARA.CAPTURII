@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,8 +9,11 @@ namespace DISERTATIE.FLACARA.CAPTURII.DTO;
 
 public record PhotoDTO
 {
-    public required int Id { get; set; }
-    public required int UserId { get; set; }
-    public required string PhotoUrl { get; set; }
-    public required string Description { get; set; }
+    public int Id { get; set; }
+    public int UserId { get; set; }
+    public string URL { get; set; }
+    public string Type { get; set; }
+    public string FileName { get; set; }
+    public IFormFile? File { get; set; }
+
 }

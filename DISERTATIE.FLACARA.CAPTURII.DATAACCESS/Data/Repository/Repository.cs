@@ -1,6 +1,8 @@
 ﻿using DISERTATIE.FLACARA.CAPTURII.DATAACCESS.Connection;
 using Dapper.Contrib.Extensions;
 using System.Data.SqlClient;
+using MySql.Data.MySqlClient;
+
 namespace DISERTATIE.FLACARA.CAPTURII.DATAACCESS.Data.Repository;
 
 public abstract class Repository<T> : IRepository<T> where T : class
@@ -20,14 +22,14 @@ public abstract class Repository<T> : IRepository<T> where T : class
     #region Methods
     public async Task<bool> DeleteAsync(T value)
     {
-        using var connection = new SqlConnection(sqlDataAccess.Connection);
+        using var connection = new MySqlConnection(sqlDataAccess.Connection);
 
         return await connection.DeleteAsync(value);
     }
 
     public async Task<List<T>> GetAllAsync()
     {
-        using var connection = new SqlConnection(sqlDataAccess.Connection);
+        using var connection = new MySqlConnection(sqlDataAccess.Connection);
 
         var entities = await connection.GetAllAsync<T>() ?? Enumerable.Empty<T>();
 
@@ -36,7 +38,7 @@ public abstract class Repository<T> : IRepository<T> where T : class
 
     public async Task<T> InsertAsync(T value)
     {
-        using var connection = new SqlConnection(sqlDataAccess.Connection);
+        using var connection = new MySqlConnection(sqlDataAccess.Connection);
 
         var id = await connection.InsertAsync(value);
 
@@ -45,14 +47,14 @@ public abstract class Repository<T> : IRepository<T> where T : class
 
     public async Task<T> SearchByIdAsync(int id)
     {
-        using var connection = new SqlConnection(sqlDataAccess.Connection);
+        using var connection = new MySqlConnection(sqlDataAccess.Connection);
 
         return await connection.GetAsync<T>(id);
     }
 
     public async Task<T?> UpdateAsync(T value)
     {
-        using var connection = new SqlConnection(sqlDataAccess.Connection);
+        using var connection = new MySqlConnection(sqlDataAccess.Connection);
 
         if (await connection.UpdateAsync(value))
             return value;
@@ -62,7 +64,7 @@ public abstract class Repository<T> : IRepository<T> where T : class
 
     public async Task<List<T>> GetEntitiesWhereAsync(Func<T, bool> expression)
     {
-        using var connection = new SqlConnection(sqlDataAccess.Connection);
+        using var connection = new MySqlConnection(sqlDataAccess.Connection);
 
         var entities = await connection.GetAllAsync<T>() ?? Enumerable.Empty<T>();
 
@@ -71,7 +73,7 @@ public abstract class Repository<T> : IRepository<T> where T : class
 
     public async Task<T> FirstOrDefaultAsync(Func<T, bool> expression)
     {
-        using var connection = new SqlConnection(sqlDataAccess.Connection);
+        using var connection = new MySqlConnection(sqlDataAccess.Connection);
 
         var entities = await connection.GetAllAsync<T>() ?? Enumerable.Empty<T>();
 

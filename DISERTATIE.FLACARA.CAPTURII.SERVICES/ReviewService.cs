@@ -33,9 +33,9 @@ public class ReviewService : IReviewService
 
     #region Crud Methods
 
-    public async Task<bool> DeleteEntityAsync(ReviewDTO value)
+    public async Task<bool> DeleteEntityAsync(int id)
     {
-        var review = _mapper.Map<Review>(value);
+        var review = await _repositories.ReviewRepository.FirstOrDefaultAsync(x => x.Id == id);
         return await _repositories.ReviewRepository.DeleteAsync(review);
     }
 

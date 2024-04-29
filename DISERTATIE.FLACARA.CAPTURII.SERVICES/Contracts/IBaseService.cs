@@ -13,5 +13,5 @@ public interface IBaseService<T> where T : class
     Task<T> UpdateEntityAsync(T value);
     Task<T> SearchEntityByIdAsync(int id);
     Task<T> FirstOrDefaultAsync(Func<T, bool> expression);
-    Task<bool> DeleteEntityAsync(T value);
+    Task<bool> DeleteEntityAsync(int id);
 }
