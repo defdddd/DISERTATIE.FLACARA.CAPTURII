@@ -16,6 +16,7 @@ public class DataFactory : IDataFactory
     public ICommentRepository CommentRepository => new CommentRepository(sqlDataAccess);
 
     public IPhotoRepository PhotoRepository => new PhotoRepository(sqlDataAccess);
+    public IFolderRepository FolderRepository => new FolderRepository(sqlDataAccess);
 
     public DataFactory(IDataAccess sqlDataAccess)
     {

@@ -14,6 +14,7 @@ public record PhotoDTO
     public string URL { get; set; }
     public string Type { get; set; }
     public string FileName { get; set; }
-    public IFormFile? File { get; set; }
+    public bool IsPublic { get; set; }
+    public string Description { get; set; }
 
 }

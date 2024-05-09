@@ -13,4 +13,6 @@ public interface IDataFactory
     ICommentRepository CommentRepository { get; }
     IReviewRepository ReviewRepository { get; }
     IPhotoRepository PhotoRepository { get; }
+    IFolderRepository FolderRepository { get; }
+
 }

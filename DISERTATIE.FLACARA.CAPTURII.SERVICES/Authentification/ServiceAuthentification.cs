@@ -68,8 +68,8 @@ public class ServiceAuthentication : IServiceAuthentification
 
         var output = new
         {
-            AccessToken = new JwtSecurityTokenHandler().WriteToken(token),
-            user.UserName
+            Token = new JwtSecurityTokenHandler().WriteToken(token),
+            UserId = user.Id
         };
 
         return output;

@@ -44,15 +44,6 @@ public class CommentService : ICommentService
         return _mapper.Map<List<CommentDTO>>(comments);
     }
 
-    public async Task<CommentDTO> FirstOrDefaultAsync(Func<CommentDTO, bool> expression)
-    {
-        var expressionMapped = _mapper.Map<Func<Comment, bool>>(expression);
-
-        var resultMapped = await _repositories.CommentRepository.FirstOrDefaultAsync(expressionMapped);
-
-        return _mapper.Map<CommentDTO>(resultMapped);
-    }
-
     public async Task<CommentDTO> InsertEntityAsync(CommentDTO value)
     {
         await Validate.FluentValidate(_validator, value);

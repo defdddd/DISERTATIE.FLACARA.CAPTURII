@@ -105,6 +105,13 @@ public class UserService : IUserService
         return _mapper.Map<UserDTO>(resultMapped);
     }
 
+    public async Task<UserProfileDTO> FirstOrDefaultAsync(int userId)
+    {
+        var result = await _repositories.UserRepository.FirstOrDefaultAsync(x => x.Id == userId);
+
+        return _mapper.Map<UserProfileDTO>(result);
+    }
+
     #endregion
 
 }

@@ -10,5 +10,6 @@ namespace DISERTATIE.FLACARA.CAPTURII.SERVICES.Contracts;
 public interface IUserService : IBaseService<UserDTO>
 {
     Task<UserDTO> SearchByEmailAsync(string email);
+    Task<UserProfileDTO> FirstOrDefaultAsync(int userId);
     Task<UserDTO> SearchByUserNameAsync(string userName);
 }

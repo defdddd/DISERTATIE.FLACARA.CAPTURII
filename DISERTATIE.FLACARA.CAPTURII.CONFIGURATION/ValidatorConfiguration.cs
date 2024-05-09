@@ -10,10 +10,12 @@ public static class ValidatorConfiguration
 {
     public static IServiceCollection ValidationConfiguration(this IServiceCollection services)
     {
-        services.AddTransient<IValidator<UserDTO>, UserValidator>();
-        services.AddTransient<IValidator<PhotoDTO>, PhotoValidator>();
-        services.AddTransient<IValidator<ReviewDTO>, ReviewValidator>();
-        services.AddTransient<IValidator<CommentDTO>, CommentValidator>();
+        services.AddScoped<IValidator<UserDTO>, UserValidator>();
+        services.AddScoped<IValidator<PhotoDTO>, PhotoValidator>();
+        services.AddScoped<IValidator<ReviewDTO>, ReviewValidator>();
+        services.AddScoped<IValidator<CommentDTO>, CommentValidator>();
+        services.AddScoped<IValidator<FolderDTO>, FolderValidator>();
+
 
         return services;
     }

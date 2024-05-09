@@ -7,17 +7,12 @@ using System.Threading.Tasks;
 
 namespace DISERTATIE.FLACARA.CAPTURII.DATAACCESS.Data.Domains;
 
-[Table("table_Photos")]
-public class Photo
+[Table("table_Folder")]
+public class Folder
 {
     [ExplicitKey]
     public required int Id { get; set; }
     public required int UserId { get; set; }
-    public required string URL { get; set; }
-    public required string Type { get; set; }
-    public bool IsPublic { get; set; }
-    public string FileName { get; set; }
-    public string Description { get; set; }
-
-
+    public required int PhotoId { get; set; }
+    public required string Name { get; set; }
 }

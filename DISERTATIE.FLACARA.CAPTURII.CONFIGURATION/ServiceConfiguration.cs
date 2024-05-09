@@ -5,8 +5,10 @@ using DISERTATIE.FLACARA.CAPTURII.SERVICES.Authentification;
 using DISERTATIE.FLACARA.CAPTURII.SERVICES.Contracts;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -23,6 +25,8 @@ public static class ServiceConfiguration
 
         services.AddScoped<IReviewService, ReviewService>();
 
+        services.AddScoped<IFolderService, FolderService>();
+
         services.AddScoped<IUserService, UserService>();
 
         services.AddScoped<IServiceAuthentification>
@@ -34,6 +38,24 @@ public static class ServiceConfiguration
                                provider.GetService<IMapper>()
                             )
             );
+
+        services.AddAuthentication(options =>
+        {
+            options.DefaultAuthenticateScheme = "JwtBearer";
+            options.DefaultChallengeScheme = "JwtBearer";
+        })
+                .AddJwtBearer("JwtBearer", jwtBearerOptions =>
+                {
+                    jwtBearerOptions.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuerSigningKey = true,
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(config.GetConnectionString("MySecretKey"))),
+                        ValidateIssuer = false,
+                        ValidateAudience = false,
+                        ValidateLifetime = true,
+                        ClockSkew = TimeSpan.FromMinutes(5)
+                    };
+                });
 
         return services;
     }

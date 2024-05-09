@@ -44,21 +44,21 @@ public class PhotoService : IPhotoService
         return _mapper.Map<List<PhotoDTO>>(photos);
     }
 
-    public async Task<PhotoDTO> FirstOrDefaultAsync(Func<PhotoDTO, bool> expression)
-    {
-        var expressionMapped = _mapper.Map<Func<Photo, bool>>(expression);
-
-        var resultMapped = await _repositories.PhotoRepository.FirstOrDefaultAsync(expressionMapped);
-
-        return _mapper.Map<PhotoDTO>(resultMapped);
-    }
-
     public async Task<PhotoDTO> InsertEntityAsync(PhotoDTO value)
     {
 
         if (string.IsNullOrEmpty(value.URL))
         {
             throw new ValidationException("Invalid Photo");
+        }
+
+        var existentFile = await _repositories.PhotoRepository.FirstOrDefaultAsync(x => x.UserId == value.UserId && 
+                                                                                        x.URL == value.URL && 
+                                                                                        x.FileName == value.FileName);
+
+        if (existentFile != null)
+        {
+            return value;
         }
 
         await Validate.FluentValidate(_validator, value);

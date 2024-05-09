@@ -2,6 +2,7 @@
 using DISERTATIE.FLACARA.CAPTURII.SERVICES.Contracts;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -9,37 +10,43 @@ namespace DISERTATIE.FLACARA.CAPTURII.Controllers;
 
 [Route("FLACARA.CAPTURII/[controller]")]
 [ApiController]
+[Authorize]
+
 public class PhotoController : ControllerBase
 {
     private readonly IPhotoService photoService;
     private readonly IWebHostEnvironment? webHostEnvironment;
-    private string path = "{0}/Images/{1}/{2}/";
+    private string path = string.Empty;
     public PhotoController(IPhotoService photoService, IWebHostEnvironment? webHostEnvironment)
     {
         this.photoService = photoService;
         this.webHostEnvironment = webHostEnvironment;
-        this.path = string.Format(this.path, webHostEnvironment.ContentRootPath);
+        this.path = webHostEnvironment.ContentRootPath + "/Images/{0}/{1}/";
     }
 
     #region Crud Operation
-    [HttpPost("UpdateImage")]
+    [HttpPost("addPhoto")]
     [Authorize(Roles = "Admin,User")]
-    public async Task<IActionResult> UpdateImages([FromForm] PhotoDTO file)
+    public async Task<IActionResult> UpdateImages([FromForm] PhotoFormDTO model)
     {
         try
         {
-            var path = string.Format(this.path, file.Type, file.Id);
+            var photoDto = JsonConvert.DeserializeObject<PhotoDTO>(model.Photo);
 
-            if (file.File.Length > 0)
+            var file = model.File;
+
+            var path = string.Format(this.path, photoDto.UserId, photoDto.Type);
+
+            if (file.Length > 0)
             {
                 await SavePicture(path, file);
 
-                file.URL = this.GetPicturesListAsync(file.Type, file.Id).FirstOrDefault();
+                photoDto.URL = this.GetPicturesListAsync(photoDto.Type, photoDto.UserId).FirstOrDefault(x => x.Contains(file.FileName));
 
-                file.FileName = file.File.FileName;
+                photoDto.FileName = file.FileName;
             }
 
-            return Ok(await this.photoService.InsertEntityAsync(file));
+            return Ok(await this.photoService.InsertEntityAsync(photoDto));
 
         }
         catch (Exception ex)
@@ -48,7 +55,7 @@ public class PhotoController : ControllerBase
         }
     }
 
-    [HttpGet("GetImages/{type}/{id}")]
+    [HttpGet("getImages/{type}/{id}")]
     public async Task<IActionResult> GetFilesLocations(string type, int userId)
     {
         try
@@ -64,7 +71,25 @@ public class PhotoController : ControllerBase
         }
     }
 
-    [HttpDelete("DeleteImage/{type}/{id}/{fileName}")]
+    [HttpGet("getMyPhotos")]
+    public async Task<IActionResult> GetMyPhotos()
+    {
+        try
+        {
+            var userId = int.Parse(User.FindFirst("Identifier")?.Value);
+
+            var result = (await this.photoService.Entities())
+                                                 .Where(x => x.UserId == userId);
+
+            return Ok(result);
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex.Message);
+        }
+    }
+
+    [HttpDelete("delete/{type}/{id}/{fileName}")]
     [Authorize(Roles = "Admin,User")]
     public IActionResult DeleteFile(string type, int id, string fileName)
     {
@@ -82,20 +107,20 @@ public class PhotoController : ControllerBase
         }
     }
 
-    private async Task SavePicture(string path, PhotoDTO photoDTO)
+    private async Task SavePicture(string path, IFormFile file)
     {
         Directory.CreateDirectory(path);
 
-        using var fileStream = System.IO.File.Create(path + photoDTO.File.FileName);
+        using var fileStream = System.IO.File.Create(path + file.FileName);
 
-        await photoDTO.File.CopyToAsync(fileStream);
+        await file.CopyToAsync(fileStream);
 
         await fileStream.FlushAsync();
     }
 
     private List<string> GetPicturesListAsync(string type, int id)
     {
-        var location = $"/Images/{type}/{id}/";
+        var location = $"/Images/{id}/{type}/";
 
         var path = webHostEnvironment.ContentRootPath + location;
 

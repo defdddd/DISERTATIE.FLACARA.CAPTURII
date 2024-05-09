@@ -25,7 +25,6 @@ public class UserController : ControllerBase
 
     [HttpGet("all")]
     [Authorize(Roles = "Admin,User")]
-
     public async Task<IActionResult> GetAll()
     {
         try
@@ -69,6 +68,28 @@ public class UserController : ControllerBase
             return BadRequest(e.Message);
         }
     }
+    [HttpGet("{id}")]
+    [Authorize(Roles = "Admin,User")]
+
+    public async Task<IActionResult> GetById(int id)
+    {
+        try
+        {
+            var userId = int.Parse(User.FindFirst("Identifier")?.Value);
+            var role = User.FindFirst(ClaimTypes.Role)?.Value;
+
+            if (userId == id || role == "Admin")
+            {
+                return Ok(await _userService.SearchEntityByIdAsync(id));
+            }
+            return BadRequest("Unauthorized");
+        }
+        catch (Exception e)
+        {
+            return BadRequest(e.Message);
+        }
+    }
+
 
     [HttpDelete("{id}")]
     [Authorize(Roles = "Admin")]
@@ -113,7 +134,7 @@ public class UserController : ControllerBase
         {
             var userId = int.Parse(User.FindFirst("Identifier")?.Value);
 
-            var person = await _userService.FirstOrDefaultAsync(x => x.Id == userId);
+            var person = await _userService.FirstOrDefaultAsync(userId);
 
             return Ok(person);
         }
