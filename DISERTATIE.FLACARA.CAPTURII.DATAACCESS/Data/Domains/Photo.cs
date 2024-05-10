@@ -13,6 +13,7 @@ public class Photo
     [ExplicitKey]
     public required int Id { get; set; }
     public required int UserId { get; set; }
+    public int FolderId { get; set; }
     public required string URL { get; set; }
     public required string Type { get; set; }
     public bool IsPublic { get; set; }

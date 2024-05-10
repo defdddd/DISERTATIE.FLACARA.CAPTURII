@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DISERTATIE.FLACARA.CAPTURII.DTO;
+namespace DISERTATIE.FLACARA.CAPTURII.DTO.EntityDTO;
 
 public record LoginUserDTO
 {

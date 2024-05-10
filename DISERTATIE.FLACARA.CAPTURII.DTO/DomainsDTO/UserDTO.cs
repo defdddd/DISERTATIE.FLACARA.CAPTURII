@@ -1,4 +1,5 @@
-﻿using DISERTATIE.FLACARA.CAPTURII.UTILS;
+﻿using DISERTATIE.FLACARA.CAPTURII.DTO.EntityDTO;
+using DISERTATIE.FLACARA.CAPTURII.UTILS;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,7 +7,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DISERTATIE.FLACARA.CAPTURII.DTO;
+namespace DISERTATIE.FLACARA.CAPTURII.DTO.DomainsDTO;
 
 public record UserDTO : RegisterUserDTO
 {

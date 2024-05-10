@@ -1,7 +1,8 @@
 ﻿using AutoMapper;
 using DISERTATIE.FLACARA.CAPTURII.DATAACCESS.Data.Domains;
 using DISERTATIE.FLACARA.CAPTURII.DATAACCESS.Factory;
-using DISERTATIE.FLACARA.CAPTURII.DTO;
+using DISERTATIE.FLACARA.CAPTURII.DTO.DomainsDTO;
+using DISERTATIE.FLACARA.CAPTURII.DTO.EntityDTO;
 using DISERTATIE.FLACARA.CAPTURII.SERVICES.Contracts;
 using DISERTATIE.FLACARA.CAPTURII.VALIDATORS;
 using FluentValidation;
@@ -40,8 +41,24 @@ public class FolderService : IFolderService
 
     public async Task<List<FolderDTO>> Entities()
     {
-        var comments = await _repositories.FolderRepository.GetAllAsync();
-        return _mapper.Map<List<FolderDTO>>(comments);
+        var folders = await _repositories.FolderRepository.GetAllAsync();
+        return _mapper.Map<List<FolderDTO>>(folders);
+    }
+
+    public async Task<List<FolderWithPhotosDTO>> GetMyFoldersWithPhotos(int userId)
+    {
+        var folders = await _repositories.FolderRepository.GetEntitiesWhereAsync(x => x.UserId == userId);
+
+        var pictures = await _repositories.PhotoRepository.GetEntitiesWhereAsync(x => x.UserId == userId);
+
+        var results = folders.Select(folder => new FolderWithPhotosDTO
+        {
+            Id = folder.Id,
+            Name = folder.Name,
+            Photos = _mapper.Map<List<PhotoDTO>>(pictures.Where(x => x.Type == folder.Name))
+        }).ToList();
+
+        return results;
     }
 
     public async Task<FolderDTO> InsertEntityAsync(FolderDTO value)

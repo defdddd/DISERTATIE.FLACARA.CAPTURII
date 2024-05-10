@@ -1,4 +1,4 @@
-﻿using DISERTATIE.FLACARA.CAPTURII.DTO;
+﻿using DISERTATIE.FLACARA.CAPTURII.DTO.DomainsDTO;
 using DISERTATIE.FLACARA.CAPTURII.SERVICES.Contracts;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -33,6 +33,23 @@ public class FolderController : ControllerBase
         try
         {
             return Ok(await _folderService.Entities());
+        }
+        catch (Exception e)
+        {
+            return BadRequest(e.Message);
+        }
+    }
+
+    [HttpGet("myFoldersWithPhotos")]
+    [Authorize(Roles = "Admin,User")]
+
+    public async Task<IActionResult> GetMyFoldersWithPhotos()
+    {
+        try
+        {
+            var userId = int.Parse(User.FindFirst("Identifier")?.Value);
+
+            return Ok(await _folderService.GetMyFoldersWithPhotos(userId));
         }
         catch (Exception e)
         {

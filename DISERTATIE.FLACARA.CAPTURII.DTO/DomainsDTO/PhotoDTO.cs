@@ -5,12 +5,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DISERTATIE.FLACARA.CAPTURII.DTO;
+namespace DISERTATIE.FLACARA.CAPTURII.DTO.DomainsDTO;
 
 public record PhotoDTO
 {
     public int Id { get; set; }
     public int UserId { get; set; }
+    public int FolderId { get; set; }
     public string URL { get; set; }
     public string Type { get; set; }
     public string FileName { get; set; }

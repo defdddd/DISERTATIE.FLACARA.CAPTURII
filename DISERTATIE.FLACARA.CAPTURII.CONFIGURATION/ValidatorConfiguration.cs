@@ -1,4 +1,4 @@
-﻿using DISERTATIE.FLACARA.CAPTURII.DTO;
+﻿using DISERTATIE.FLACARA.CAPTURII.DTO.DomainsDTO;
 using DISERTATIE.FLACARA.CAPTURII.VALIDATORS.DTO.Validation;
 using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;

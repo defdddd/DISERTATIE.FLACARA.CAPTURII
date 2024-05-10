@@ -1,4 +1,4 @@
-﻿using DISERTATIE.FLACARA.CAPTURII.DTO;
+﻿using DISERTATIE.FLACARA.CAPTURII.DTO.DomainsDTO;
 using FluentValidation;
 
 

@@ -1,6 +1,6 @@
 ﻿using DISERTATIE.FLACARA.CAPTURII.UTILS;
 
-namespace DISERTATIE.FLACARA.CAPTURII.DTO;
+namespace DISERTATIE.FLACARA.CAPTURII.DTO.EntityDTO;
 
 public record RegisterUserDTO : LoginUserDTO
 {
