@@ -13,4 +13,6 @@ public record ReviewDTO
     public required int UserId { get; set; }
     public required int Grade { get; set; }
     public required string Text { get; set; }
+    public UserDTO? User { get; set; }
+
 }

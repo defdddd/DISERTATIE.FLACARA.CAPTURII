@@ -20,8 +20,4 @@
     <ProjectReference Include="..\DISERTATIE.FLACARA.CAPTURII.CONFIGURATION\DISERTATIE.FLACARA.CAPTURII.CONFIGURATION.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Images\" />
-  </ItemGroup>
-
 </Project>

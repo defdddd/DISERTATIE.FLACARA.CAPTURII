@@ -17,5 +17,9 @@ public record PhotoDTO
     public string FileName { get; set; }
     public bool IsPublic { get; set; }
     public string Description { get; set; }
+    public List<CommentDTO>? Comments { get; set; }
+    public List<ReviewDTO>? Reviews { get; set; }
+    public UserDTO? User { get; set; }
+
 
 }

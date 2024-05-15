@@ -5,4 +5,5 @@ namespace DISERTATIE.FLACARA.CAPTURII.SERVICES.Contracts;
 
 public interface IPhotoService : IBaseService<PhotoDTO>
 {
+    Task<List<PhotoDTO>> GetPosts(int page, int pageSize);
 }

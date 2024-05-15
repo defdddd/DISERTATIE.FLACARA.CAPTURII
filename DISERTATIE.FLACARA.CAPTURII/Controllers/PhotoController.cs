@@ -25,6 +25,23 @@ public class PhotoController : ControllerBase
         this.path = webHostEnvironment.ContentRootPath + "/Images/{0}/{1}/";
     }
 
+
+    [HttpGet("getPosts/{page}/{pageSize}")]
+    public async Task<IActionResult> GetFilesLocations(int page, int pageSize)
+    {
+        try
+        {
+            var result = await this.photoService.GetPosts(page, pageSize);
+                                                 
+            return Ok(result);
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex.Message);
+        }
+    }
+
+
     #region Crud Operation
     [HttpPost("addPhoto")]
     [Authorize(Roles = "Admin,User")]

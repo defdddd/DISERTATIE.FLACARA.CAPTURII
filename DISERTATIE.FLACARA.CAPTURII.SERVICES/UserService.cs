@@ -113,6 +113,11 @@ public class UserService : IUserService
         return _mapper.Map<UserProfileDTO>(result);
     }
 
+    public Task<List<UserDTO>> EntitiesWithPagination(int page, int pageSize)
+    {
+        throw new NotImplementedException();
+    }
+
     #endregion
 
 }

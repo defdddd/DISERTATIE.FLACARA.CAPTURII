@@ -2,7 +2,9 @@
 using DISERTATIE.FLACARA.CAPTURII.DATAACCESS.Data.Domains;
 using DISERTATIE.FLACARA.CAPTURII.DATAACCESS.Factory;
 using DISERTATIE.FLACARA.CAPTURII.DTO.DomainsDTO;
+using DISERTATIE.FLACARA.CAPTURII.DTO.EntityDTO;
 using DISERTATIE.FLACARA.CAPTURII.SERVICES.Contracts;
+using DISERTATIE.FLACARA.CAPTURII.UTILS;
 using DISERTATIE.FLACARA.CAPTURII.VALIDATORS;
 using FluentValidation;
 using System;
@@ -42,6 +44,33 @@ public class PhotoService : IPhotoService
     {
         var photos = await _repositories.PhotoRepository.GetAllAsync();
         return _mapper.Map<List<PhotoDTO>>(photos);
+    }
+
+    public async Task<List<PhotoDTO>> EntitiesWithPagination(int page, int pageSize)
+    {
+        var photos = (await _repositories.PhotoRepository.GetEntitiesWhereAsync(x => x.IsPublic))
+                                                         .OrderByDescending(x => x.Id)
+                                                         .ToList();
+
+        return _mapper.Map<List<PhotoDTO>>(ListUils<Photo>.GetPage(photos, page, pageSize));
+    }
+
+    public async Task<List<PhotoDTO>> GetPosts(int page, int pageSize)
+    {
+        var result = await this.EntitiesWithPagination(page, pageSize);
+
+        foreach(var photo in result)
+        {
+            var reviews = await this._repositories.ReviewRepository.GetEntitiesWhereAsync(x => x.PhotoId == photo.Id);
+            var comments = await this._repositories.CommentRepository.GetEntitiesWhereAsync(x => x.PhotoId == photo.Id);
+            var user = await this._repositories.UserRepository.FirstOrDefaultAsync(x => x.Id == photo.UserId);
+
+            photo.Comments = _mapper.Map<List<CommentDTO>>(comments);
+            photo.Reviews = _mapper.Map<List<ReviewDTO>>(reviews);
+            photo.User = _mapper.Map<UserDTO>(user);
+        }
+
+        return result;
     }
 
     public async Task<PhotoDTO> InsertEntityAsync(PhotoDTO value)

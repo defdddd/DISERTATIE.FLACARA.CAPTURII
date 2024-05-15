@@ -45,6 +45,11 @@ public class FolderService : IFolderService
         return _mapper.Map<List<FolderDTO>>(folders);
     }
 
+    public Task<List<FolderDTO>> EntitiesWithPagination(int page, int pageSize)
+    {
+        throw new NotImplementedException();
+    }
+
     public async Task<List<FolderWithPhotosDTO>> GetMyFoldersWithPhotos(int userId)
     {
         var folders = await _repositories.FolderRepository.GetEntitiesWhereAsync(x => x.UserId == userId);

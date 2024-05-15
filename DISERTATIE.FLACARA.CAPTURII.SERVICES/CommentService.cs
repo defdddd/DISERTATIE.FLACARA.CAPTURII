@@ -44,6 +44,11 @@ public class CommentService : ICommentService
         return _mapper.Map<List<CommentDTO>>(comments);
     }
 
+    public Task<List<CommentDTO>> EntitiesWithPagination(int page, int pageSize)
+    {
+        throw new NotImplementedException();
+    }
+
     public async Task<CommentDTO> InsertEntityAsync(CommentDTO value)
     {
         await Validate.FluentValidate(_validator, value);

@@ -12,4 +12,5 @@ public record CommentDTO
     public required int PhotoId { get; set; }
     public required int UserId { get; set; }
     public required string Text { get; set; }
+    public UserDTO? User { get; set; }
 }

@@ -9,6 +9,7 @@ namespace DISERTATIE.FLACARA.CAPTURII.SERVICES.Contracts;
 public interface IBaseService<T> where T : class
 {
     Task<List<T>> Entities();
+    Task<List<T>> EntitiesWithPagination(int page, int pageSize);
     Task<T> InsertEntityAsync(T value);
     Task<T> UpdateEntityAsync(T value);
     Task<T> SearchEntityByIdAsync(int id);

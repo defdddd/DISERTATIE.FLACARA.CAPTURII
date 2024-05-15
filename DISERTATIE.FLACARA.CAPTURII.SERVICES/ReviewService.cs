@@ -45,6 +45,11 @@ public class ReviewService : IReviewService
         return _mapper.Map<List<ReviewDTO>>(reviews);
     }
 
+    public Task<List<ReviewDTO>> EntitiesWithPagination(int page, int pageSize)
+    {
+        throw new NotImplementedException();
+    }
+
     public async Task<ReviewDTO> InsertEntityAsync(ReviewDTO value)
     {
         var existingReview = await _repositories.ReviewRepository.FirstOrDefaultAsync(x => x.Text == value.Text && x.UserId == value.UserId);
