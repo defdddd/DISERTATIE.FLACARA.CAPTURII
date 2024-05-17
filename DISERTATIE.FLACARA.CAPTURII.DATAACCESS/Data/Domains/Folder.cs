@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace DISERTATIE.FLACARA.CAPTURII.DATAACCESS.Data.Domains;
 
 [Table("table_Folder")]
-public class Folder
+public class Folder : IIdentifiable
 {
     [ExplicitKey]
     public required int Id { get; set; }

@@ -14,5 +14,6 @@ public class FolderRepository : Repository<Folder>, IFolderRepository
 {
     public FolderRepository(IDataAccess sqlDataAccess) : base(sqlDataAccess)
     {
+        this.sqlTableName = "table_Folder";
     }
 }

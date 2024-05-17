@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace DISERTATIE.FLACARA.CAPTURII.DATAACCESS.Data.Domains;
 
 [Table("table_Reviews")]
-public class Review
+public class Review : IIdentifiable
 {
     [ExplicitKey]
     public required int Id { get; set; }

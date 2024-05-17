@@ -10,5 +10,6 @@ public class CommentRepository : Repository<Comment>, ICommentRepository
 {
     public CommentRepository(IDataAccess sqlDataAccess) : base(sqlDataAccess)
     {
+        this.sqlTableName = "table_Comments";
     }
 }

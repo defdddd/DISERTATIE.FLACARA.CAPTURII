@@ -48,11 +48,9 @@ public class PhotoService : IPhotoService
 
     public async Task<List<PhotoDTO>> EntitiesWithPagination(int page, int pageSize)
     {
-        var photos = (await _repositories.PhotoRepository.GetEntitiesWhereAsync(x => x.IsPublic))
-                                                         .OrderByDescending(x => x.Id)
-                                                         .ToList();
+        var photos = await _repositories.PhotoRepository.GetPagedData(page, pageSize);
 
-        return _mapper.Map<List<PhotoDTO>>(ListUils<Photo>.GetPage(photos, page, pageSize));
+        return _mapper.Map<List<PhotoDTO>>(photos);
     }
 
     public async Task<List<PhotoDTO>> GetPosts(int page, int pageSize)
@@ -61,13 +59,11 @@ public class PhotoService : IPhotoService
 
         foreach(var photo in result)
         {
-            var reviews = await this._repositories.ReviewRepository.GetEntitiesWhereAsync(x => x.PhotoId == photo.Id);
-            var comments = await this._repositories.CommentRepository.GetEntitiesWhereAsync(x => x.PhotoId == photo.Id);
-            var user = await this._repositories.UserRepository.FirstOrDefaultAsync(x => x.Id == photo.UserId);
+            var reviews = await this._repositories.ReviewRepository.GetByPhotoId(photo.Id);
+            var comments = await this._repositories.CommentRepository.GetByPhotoId(photo.Id);
 
             photo.Comments = _mapper.Map<List<CommentDTO>>(comments);
             photo.Reviews = _mapper.Map<List<ReviewDTO>>(reviews);
-            photo.User = _mapper.Map<UserDTO>(user);
         }
 
         return result;

@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 namespace DISERTATIE.FLACARA.CAPTURII.DATAACCESS.Data.Domains;
 
 [Table("table_Users")]
-public class User
+public class User : IIdentifiable
 {
     [ExplicitKey]
     public int Id { get; set; }
@@ -25,4 +25,12 @@ public class User
     public Gender Gender { get; set; }
     public Status Status { get; set; }
     public Role Role { get; set; }
+    
+    public int UserId
+    {
+        get
+        {
+            return this.Id;
+        }
+    }
 }

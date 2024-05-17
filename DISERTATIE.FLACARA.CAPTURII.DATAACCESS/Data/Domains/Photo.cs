@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace DISERTATIE.FLACARA.CAPTURII.DATAACCESS.Data.Domains;
 
 [Table("table_Photos")]
-public class Photo
+public class Photo : IIdentifiable
 {
     [ExplicitKey]
     public required int Id { get; set; }

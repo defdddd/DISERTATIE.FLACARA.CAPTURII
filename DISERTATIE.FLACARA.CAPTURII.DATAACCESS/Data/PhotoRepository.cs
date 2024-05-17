@@ -9,5 +9,7 @@ public class PhotoRepository : Repository<Photo>, IPhotoRepository
 {
     public PhotoRepository(IDataAccess sqlDataAccess) : base(sqlDataAccess)
     {
+        this.sqlTableName = "table_Photos";
     }
+
 }

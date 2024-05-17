@@ -9,5 +9,6 @@ public class UserRepository : Repository<User>, IUserRepository
 {
     public UserRepository(IDataAccess sqlDataAccess) : base(sqlDataAccess)
     {
+        this.sqlTableName = "table_Users";
     }
 }
