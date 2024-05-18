@@ -8,6 +8,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Images\NewFolder1\**" />
+    <Content Remove="Images\NewFolder1\**" />
+    <EmbeddedResource Remove="Images\NewFolder1\**" />
+    <None Remove="Images\NewFolder1\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="AutoMapper" Version="12.0.1" />
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.3" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0" />
@@ -18,6 +25,10 @@
 
   <ItemGroup>
     <ProjectReference Include="..\DISERTATIE.FLACARA.CAPTURII.CONFIGURATION\DISERTATIE.FLACARA.CAPTURII.CONFIGURATION.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Images\8\" />
   </ItemGroup>
 
 </Project>

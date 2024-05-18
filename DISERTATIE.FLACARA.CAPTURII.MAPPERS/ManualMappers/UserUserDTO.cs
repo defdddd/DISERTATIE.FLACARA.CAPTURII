@@ -1,5 +1,6 @@
 ﻿using DISERTATIE.FLACARA.CAPTURII.DATAACCESS.Data.Domains;
 using DISERTATIE.FLACARA.CAPTURII.DTO.DomainsDTO;
+using DISERTATIE.FLACARA.CAPTURII.DTO.EntityDTO;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,13 +11,11 @@ namespace DISERTATIE.FLACARA.CAPTURII.MAPPERS.ManualMappers;
 
 internal static class UserUserDTO
 {
-    internal static UserDTO MapToDTO(User user)
+    internal static UserProfileDTO MapToDTO(User user)
     {
-        return new UserDTO
+        return new UserProfileDTO
         {
             Id = user.Id,
-            UserName = user.UserName,
-            Password = user.Password,
             Email = user.Email,
             FirstName = user.FirstName,
             LastName = user.LastName,

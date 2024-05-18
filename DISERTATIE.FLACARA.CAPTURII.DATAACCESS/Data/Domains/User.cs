@@ -26,11 +26,4 @@ public class User : IIdentifiable
     public Status Status { get; set; }
     public Role Role { get; set; }
     
-    public int UserId
-    {
-        get
-        {
-            return this.Id;
-        }
-    }
 }

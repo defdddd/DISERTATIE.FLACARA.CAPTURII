@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using DISERTATIE.FLACARA.CAPTURII.DTO.EntityDTO;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,7 +20,7 @@ public record PhotoDTO
     public string Description { get; set; }
     public List<CommentDTO>? Comments { get; set; }
     public List<ReviewDTO>? Reviews { get; set; }
-    public UserDTO? User { get; set; }
+    public UserProfileDTO? User { get; set; }
 
 
 }
