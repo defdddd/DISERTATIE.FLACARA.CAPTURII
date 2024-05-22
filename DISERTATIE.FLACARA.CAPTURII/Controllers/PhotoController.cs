@@ -163,11 +163,11 @@ public class PhotoController : ControllerBase
 
     private List<string> GetPicturesListAsync(string type, int id)
     {
-        var location = $"/Images/{id}/{type}/";
+        var location = $"/Images/{type}/{id}/";
 
         var path = webHostEnvironment.ContentRootPath + location;
 
-        var host = "http:" + Request.Host.Value + location;
+        var host = Request.Scheme + ":" + Request.Host.Value + location;
 
         return Directory.GetFiles(path)
                         .Select(file => host + Path.GetFileName(file))
