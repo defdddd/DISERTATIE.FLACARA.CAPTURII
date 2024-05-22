@@ -1,5 +1,7 @@
-﻿using DISERTATIE.FLACARA.CAPTURII.DTO.DomainsDTO;
+﻿using DISERTATIE.FLACARA.CAPTURII.DATAACCESS.Data.Domains;
+using DISERTATIE.FLACARA.CAPTURII.DTO.DomainsDTO;
 using DISERTATIE.FLACARA.CAPTURII.DTO.EntityDTO;
+using DISERTATIE.FLACARA.CAPTURII.SERVICES;
 using DISERTATIE.FLACARA.CAPTURII.SERVICES.Contracts;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -40,6 +42,23 @@ public class PhotoController : ControllerBase
             return BadRequest(ex.Message);
         }
     }
+    [HttpPut("update")]
+    [Authorize(Roles = "Admin,User,Photographer")]
+
+    public async Task<IActionResult> Update([FromBody] PhotoDTO photo)
+    {
+        try
+        {
+            await CheckRole();
+
+            return Ok(await this.photoService.UpdateEntityAsync(photo));
+        }
+        catch (Exception e)
+        {
+            return BadRequest(e.Message);
+        }
+    }
+
 
 
     #region Crud Operation
@@ -50,6 +69,10 @@ public class PhotoController : ControllerBase
         try
         {
             var photoDto = JsonConvert.DeserializeObject<PhotoDTO>(model.Photo);
+
+            var userId = int.Parse(User.FindFirst("Identifier")?.Value);
+
+            photoDto.UserId = userId;
 
             var file = model.File;
 
@@ -107,17 +130,19 @@ public class PhotoController : ControllerBase
         }
     }
 
-    [HttpDelete("delete/{type}/{id}/{fileName}")]
-    [Authorize(Roles = "Admin,User")]
-    public IActionResult DeleteFile(string type, int id, string fileName)
+    [HttpDelete("{id}")]
+    [Authorize(Roles = "Admin,User,Photographer")]
+    public async Task<IActionResult> DeleteFile(int id)
     {
         try
         {
-            var path = webHostEnvironment.ContentRootPath + $"/Images/{type}/{id}/{fileName}";
+            var photo = await this.photoService.SearchEntityByIdAsync(id);
+
+            var path = webHostEnvironment.ContentRootPath + $"/Images/{photo.UserId}/{photo.Type}/{photo.FileName}";
 
             System.IO.File.Delete(path);
 
-            return Ok(true);
+            return Ok(await this.photoService.DeleteEntityAsync(photo.Id));
         }
         catch (Exception ex)
         {
@@ -147,6 +172,11 @@ public class PhotoController : ControllerBase
         return Directory.GetFiles(path)
                         .Select(file => host + Path.GetFileName(file))
                         .ToList();
+
+    }
+
+    private async Task CheckRole()
+    {
 
     }
     #endregion

@@ -3,15 +3,18 @@ using DISERTATIE.FLACARA.CAPTURII.DATAACCESS.Data.Domains;
 using DISERTATIE.FLACARA.CAPTURII.DATAACCESS.Factory;
 using DISERTATIE.FLACARA.CAPTURII.DTO.DomainsDTO;
 using DISERTATIE.FLACARA.CAPTURII.DTO.EntityDTO;
+using DISERTATIE.FLACARA.CAPTURII.HUBS;
 using DISERTATIE.FLACARA.CAPTURII.SERVICES.Contracts;
 using DISERTATIE.FLACARA.CAPTURII.UTILS;
 using DISERTATIE.FLACARA.CAPTURII.VALIDATORS;
 using FluentValidation;
+using Microsoft.AspNetCore.SignalR;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 
 namespace DISERTATIE.FLACARA.CAPTURII.SERVICES;
 
@@ -21,14 +24,17 @@ public class PhotoService : IPhotoService
     private readonly IDataFactory _repositories;
     private readonly IValidator<PhotoDTO> _validator;
     private readonly IMapper _mapper;
+    private readonly IHubContext<PostHub> _hubContext;
+
     #endregion
 
     #region Constructor
-    public PhotoService(IDataFactory repositories, IValidator<PhotoDTO> validator, IMapper mapper)
+    public PhotoService(IDataFactory repositories, IValidator<PhotoDTO> validator, IMapper mapper, IHubContext<PostHub> hubContext)
     {
         _repositories = repositories;
         _validator = validator;
         _mapper = mapper;
+        _hubContext = hubContext;
     }
     #endregion
 
@@ -83,15 +89,35 @@ public class PhotoService : IPhotoService
 
         if (existentFile != null)
         {
-            return value;
+            var existentFileResult = _mapper.Map<PhotoDTO>(existentFile);
+            var id = existentFile.Id;
+
+            var comments = _mapper.Map<List<CommentDTO>>(await this._repositories.CommentRepository.GetByPhotoId(id));
+            var reviews = _mapper.Map<List<ReviewDTO>>(await this._repositories.ReviewRepository.GetByPhotoId(id));
+
+            existentFileResult.Reviews = reviews;
+            existentFileResult.Comments = comments;
+
+            await _hubContext.Clients.All.SendAsync("NewPostAdded", existentFileResult);
+
+            return existentFileResult;
         }
+
+
+        var folder = await _repositories.FolderRepository.FirstOrDefaultAsync(x => x.Name == value.Type);
+
+        value.FolderId = folder.Id;
 
         await Validate.FluentValidate(_validator, value);
 
         var photo = _mapper.Map<Photo>(value);
 
         var insertedPhoto = await _repositories.PhotoRepository.InsertAsync(photo);
-        return _mapper.Map<PhotoDTO>(insertedPhoto);
+        var result = _mapper.Map<PhotoDTO>(insertedPhoto);
+
+        await _hubContext.Clients.All.SendAsync("NewPostAdded", result);
+
+        return result;
     }
 
     public async Task<PhotoDTO> SearchEntityByIdAsync(int id)

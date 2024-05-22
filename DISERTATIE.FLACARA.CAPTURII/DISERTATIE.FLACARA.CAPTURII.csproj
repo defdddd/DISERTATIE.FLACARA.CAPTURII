@@ -18,13 +18,14 @@
     <PackageReference Include="AutoMapper" Version="12.0.1" />
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.3" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.0" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.1" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="8.0.2" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\DISERTATIE.FLACARA.CAPTURII.CONFIGURATION\DISERTATIE.FLACARA.CAPTURII.CONFIGURATION.csproj" />
+    <ProjectReference Include="..\DISERTATIE.FLACARA.CAPTURII.HUBS\DISERTATIE.FLACARA.CAPTURII.HUBS.csproj" />
   </ItemGroup>
 
   <ItemGroup>

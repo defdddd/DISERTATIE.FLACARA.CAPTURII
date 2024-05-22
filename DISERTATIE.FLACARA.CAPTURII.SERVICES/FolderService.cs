@@ -3,6 +3,7 @@ using DISERTATIE.FLACARA.CAPTURII.DATAACCESS.Data.Domains;
 using DISERTATIE.FLACARA.CAPTURII.DATAACCESS.Factory;
 using DISERTATIE.FLACARA.CAPTURII.DTO.DomainsDTO;
 using DISERTATIE.FLACARA.CAPTURII.DTO.EntityDTO;
+using DISERTATIE.FLACARA.CAPTURII.HUBS;
 using DISERTATIE.FLACARA.CAPTURII.SERVICES.Contracts;
 using DISERTATIE.FLACARA.CAPTURII.VALIDATORS;
 using FluentValidation;
@@ -20,6 +21,7 @@ public class FolderService : IFolderService
     private readonly IDataFactory _repositories;
     private readonly IValidator<FolderDTO> _validator;
     private readonly IMapper _mapper;
+
     #endregion
 
     #region Constructor

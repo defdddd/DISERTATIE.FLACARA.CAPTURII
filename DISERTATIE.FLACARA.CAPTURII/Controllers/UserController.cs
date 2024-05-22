@@ -24,7 +24,7 @@ public class UserController : ControllerBase
     #region Crud Operation
 
     [HttpGet("all")]
-    [Authorize(Roles = "Admin,User")]
+    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> GetAll()
     {
         try
@@ -53,7 +53,7 @@ public class UserController : ControllerBase
     }
 
     [HttpPut("update")]
-    [Authorize(Roles = "Admin,User")]
+    [Authorize(Roles = "Admin,User,Photograhper")]
 
     public async Task<IActionResult> Update([FromBody] UserDTO user)
     {
@@ -69,7 +69,7 @@ public class UserController : ControllerBase
         }
     }
     [HttpGet("{id}")]
-    [Authorize(Roles = "Admin,User")]
+    [Authorize(Roles = "Admin,User,Photograhper")]
 
     public async Task<IActionResult> GetById(int id)
     {
@@ -126,7 +126,7 @@ public class UserController : ControllerBase
     }
 
     [HttpGet("myProfile")]
-    [Authorize(Roles = "Admin,User")]
+    [Authorize(Roles = "Admin,User,Photograhper")]
 
     public async Task<IActionResult> GetMyData()
     {

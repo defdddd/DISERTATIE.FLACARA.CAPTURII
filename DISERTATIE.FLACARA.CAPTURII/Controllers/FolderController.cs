@@ -64,6 +64,11 @@ public class FolderController : ControllerBase
     {
         try
         {
+
+            var userId = int.Parse(User.FindFirst("Identifier")?.Value);
+
+            folder.UserId = userId;
+
             var path = string.Format(this.path, folder.UserId, folder.Name);
 
             if(!Directory.Exists(path))
