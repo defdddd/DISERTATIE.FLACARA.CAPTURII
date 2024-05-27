@@ -67,7 +67,7 @@ public class UserService : IUserService
 
     public async Task<UserDTO> UpdateEntityAsync(UserDTO value)
     {
-        var existingUser = await _repositories.UserRepository.SearchByIdAsync(value.Id) ?? throw new ValidationException("User does not exist");
+        var existingUser = await _repositories.UserRepository.SearchByIdAsync(value.Id.GetValueOrDefault()) ?? throw new ValidationException("User does not exist");
 
         var userWithSameUserName = await _repositories.UserRepository.FirstOrDefaultAsync(x => x.UserName == value.UserName && x.Id != value.Id);
         if (userWithSameUserName != null)
@@ -111,6 +111,27 @@ public class UserService : IUserService
         var result = await _repositories.UserRepository.FirstOrDefaultAsync(x => x.Id == userId);
 
         return _mapper.Map<UserProfileDTO>(result);
+    }
+
+    public async Task<dynamic> GetTop10Users()
+    {
+        var result =  (await _repositories.UserRepository.GetTop10Users())
+            .Select(x => 
+            new
+            {
+                User = GetUserProfileFromUserId(x.Id),
+                AverageGrade = Math.Round(x.AverageGrade,2)
+            });
+
+
+        return result;
+    }
+
+    private UserProfileDTO? GetUserProfileFromUserId(int userId)
+    {
+        var user = _repositories.UserRepository.SearchByIdAsync(userId).Result;
+
+        return _mapper.Map<UserProfileDTO>(user);
     }
 
     public Task<List<UserDTO>> EntitiesWithPagination(int page, int pageSize)

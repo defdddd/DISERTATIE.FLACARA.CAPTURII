@@ -142,7 +142,7 @@ public class PhotoController : ControllerBase
 
             System.IO.File.Delete(path);
 
-            return Ok(await this.photoService.DeleteEntityAsync(photo.Id));
+            return Ok(await this.photoService.DeleteEntityAsync(photo.Id.GetValueOrDefault()));
         }
         catch (Exception ex)
         {
@@ -163,7 +163,7 @@ public class PhotoController : ControllerBase
 
     private List<string> GetPicturesListAsync(string type, int id)
     {
-        var location = $"/Images/{type}/{id}/";
+        var location = $"/Images/{id}/{type}/";
 
         var path = webHostEnvironment.ContentRootPath + location;
 

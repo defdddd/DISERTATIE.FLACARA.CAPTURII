@@ -86,7 +86,7 @@ public class FolderService : IFolderService
 
     public async Task<FolderDTO> UpdateEntityAsync(FolderDTO value)
     {
-        var commentSearch = await _repositories.FolderRepository.SearchByIdAsync(value.Id);
+        var commentSearch = await _repositories.FolderRepository.SearchByIdAsync(value.Id.GetValueOrDefault());
 
         if (commentSearch == null)
         {

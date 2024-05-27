@@ -67,7 +67,7 @@ public class CommentService : ICommentService
 
     public async Task<CommentDTO> UpdateEntityAsync(CommentDTO value)
     {
-        var commentSearch = await _repositories.CommentRepository.SearchByIdAsync(value.Id);
+        var commentSearch = await _repositories.CommentRepository.SearchByIdAsync(value.Id.GetValueOrDefault());
 
         if (commentSearch == null)
         {

@@ -10,7 +10,7 @@ namespace DISERTATIE.FLACARA.CAPTURII.DTO.DomainsDTO;
 
 public record PhotoDTO
 {
-    public int Id { get; set; }
+    public int? Id { get; set; }
     public int UserId { get; set; }
     public int FolderId { get; set; }
     public string URL { get; set; }

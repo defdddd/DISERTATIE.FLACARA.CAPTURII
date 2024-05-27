@@ -5,4 +5,5 @@ namespace DISERTATIE.FLACARA.CAPTURII.DATAACCESS.Data.Contracts;
 
 public interface IUserRepository : IRepository<User>
 {
+    Task<List<dynamic>> GetTop10Users();
 }

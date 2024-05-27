@@ -10,8 +10,8 @@ namespace DISERTATIE.FLACARA.CAPTURII.DATAACCESS.Data.Domains;
 [Table("table_Reviews")]
 public class Review : IIdentifiable
 {
-    [ExplicitKey]
-    public required int Id { get; set; }
+    [Key]
+    public int Id { get; set; }
     public required int PhotoId { get; set; }
     public required int UserId { get; set; }
     public required int Grade { get; set; }

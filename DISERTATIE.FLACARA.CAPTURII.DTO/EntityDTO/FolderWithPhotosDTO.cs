@@ -9,7 +9,7 @@ namespace DISERTATIE.FLACARA.CAPTURII.DTO.EntityDTO;
 
 public record FolderWithPhotosDTO
 {
-    public int Id { get; set; }
+    public int? Id { get; set; }
     public string Name { get; set; }
     public List<PhotoDTO>? Photos { get; set; }
 }

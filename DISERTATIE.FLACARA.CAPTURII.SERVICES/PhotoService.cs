@@ -65,8 +65,8 @@ public class PhotoService : IPhotoService
 
         foreach(var photo in result)
         {
-            var reviews = await this._repositories.ReviewRepository.GetByPhotoId(photo.Id);
-            var comments = await this._repositories.CommentRepository.GetByPhotoId(photo.Id);
+            var reviews = await this._repositories.ReviewRepository.GetByPhotoId(photo.Id.GetValueOrDefault());
+            var comments = await this._repositories.CommentRepository.GetByPhotoId(photo.Id.GetValueOrDefault());
 
             photo.Comments = _mapper.Map<List<CommentDTO>>(comments);
             photo.Reviews = _mapper.Map<List<ReviewDTO>>(reviews);
@@ -104,7 +104,8 @@ public class PhotoService : IPhotoService
         }
 
 
-        var folder = await _repositories.FolderRepository.FirstOrDefaultAsync(x => x.Name == value.Type);
+        var folder = await _repositories.FolderRepository.FirstOrDefaultAsync(x => x.Name == value.Type) ??
+                     await _repositories.FolderRepository.InsertAsync(new Folder() { Name = value.Type, UserId = value.UserId});
 
         value.FolderId = folder.Id;
 
@@ -128,7 +129,7 @@ public class PhotoService : IPhotoService
 
     public async Task<PhotoDTO> UpdateEntityAsync(PhotoDTO value)
     {
-        var photoSearch = await _repositories.PhotoRepository.SearchByIdAsync(value.Id);
+        var photoSearch = await _repositories.PhotoRepository.SearchByIdAsync(value.Id.GetValueOrDefault());
 
         if (photoSearch == null)
         {

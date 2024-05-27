@@ -13,7 +13,7 @@ namespace DISERTATIE.FLACARA.CAPTURII.DATAACCESS.Data.Domains;
 [Table("table_Users")]
 public class User : IIdentifiable
 {
-    [ExplicitKey]
+    [Key]
     public int Id { get; set; }
     public required string UserName { get; set; }
     public required string Password { get; set; }

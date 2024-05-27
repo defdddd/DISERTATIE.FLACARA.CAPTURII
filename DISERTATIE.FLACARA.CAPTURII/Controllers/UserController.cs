@@ -144,6 +144,21 @@ public class UserController : ControllerBase
         }
     }
 
+    [HttpGet("top10Users")]
+    public async Task<IActionResult> GetTop10Users()
+    {
+        try
+        {
+            var result = await _userService.GetTop10Users();
+
+            return Ok(result);
+        }
+        catch (Exception e)
+        {
+            return BadRequest(e.Message);
+        }
+    }
+
 
 
     [HttpGet("email/{email}")]
@@ -167,7 +182,7 @@ public class UserController : ControllerBase
     private async Task CheckRole(UserDTO user)
     {
         var userId = int.Parse(User.FindFirst("Identifier")?.Value);
-        var userData = await _userService.SearchEntityByIdAsync(user.Id);
+        var userData = await _userService.SearchEntityByIdAsync(user.Id.GetValueOrDefault());
         var role = User.FindFirst(ClaimTypes.Role)?.Value;
 
         if (userId.Equals(user.Id) && userData.Role != user.Role)

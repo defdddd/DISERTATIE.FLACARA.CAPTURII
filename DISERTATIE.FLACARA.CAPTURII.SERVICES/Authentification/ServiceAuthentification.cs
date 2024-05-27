@@ -30,8 +30,7 @@ public class ServiceAuthentication : IServiceAuthentification
     }
     private async Task<bool> CheckEmailAsync(string email)
     {
-        return await _repositories.UserRepository.FirstOrDefaultAsync(x => x.Email == email) != null;
-
+        return (await _repositories.UserRepository.FirstOrDefaultAsync(x => x.Email == email)) != null;
     }
 
     private async Task<bool> CheckUserNameAsync(string userName)
