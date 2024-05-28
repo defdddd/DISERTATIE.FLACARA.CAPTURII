@@ -66,11 +66,11 @@ public abstract class Repository<T> : IRepository<T> where T : class
         connection.Open();
 
         var sql = $@"
-        SELECT * 
-        FROM [{sqlTableName}]
-        ORDER BY [Id] DESC
-        OFFSET {(pageNumber - 1) * pageSize} ROWS 
-        FETCH NEXT {pageSize} ROWS ONLY;";
+            SELECT * 
+            FROM [{sqlTableName}]
+            ORDER BY [Id] DESC
+            OFFSET {(pageNumber - 1) * pageSize} ROWS 
+            FETCH NEXT {pageSize} ROWS ONLY;";
 
         var entities = await connection.QueryAsync<T>(sql) ?? Enumerable.Empty<T>();
 

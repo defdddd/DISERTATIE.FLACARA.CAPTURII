@@ -23,7 +23,7 @@ public class UserRepository : Repository<User>, IUserRepository
 
         connection.Open();
 
-        var entities = await connection.QueryAsync<object>(sql) ?? Enumerable.Empty<object>();
+        var entities = await connection.QueryAsync<dynamic>(sql) ?? Enumerable.Empty<dynamic>();
 
         return entities.ToList();
     }

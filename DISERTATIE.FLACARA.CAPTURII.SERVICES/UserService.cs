@@ -120,11 +120,12 @@ public class UserService : IUserService
             new
             {
                 User = GetUserProfileFromUserId(x.Id),
-                AverageGrade = Math.Round(x.AverageGrade,2)
+                AverageGrade = x.AverageGrade,
+                Photos = x.TotalPhotos
             });
 
-
-        return result;
+        
+        return result.ToList();
     }
 
     private UserProfileDTO? GetUserProfileFromUserId(int userId)

@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
@@ -26,10 +26,6 @@
   <ItemGroup>
     <ProjectReference Include="..\DISERTATIE.FLACARA.CAPTURII.CONFIGURATION\DISERTATIE.FLACARA.CAPTURII.CONFIGURATION.csproj" />
     <ProjectReference Include="..\DISERTATIE.FLACARA.CAPTURII.HUBS\DISERTATIE.FLACARA.CAPTURII.HUBS.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Images\8\" />
   </ItemGroup>
 
 </Project>

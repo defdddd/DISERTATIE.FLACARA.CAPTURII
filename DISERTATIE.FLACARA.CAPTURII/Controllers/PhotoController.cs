@@ -29,12 +29,26 @@ public class PhotoController : ControllerBase
 
 
     [HttpGet("getPosts/{page}/{pageSize}")]
-    public async Task<IActionResult> GetFilesLocations(int page, int pageSize)
+    public async Task<IActionResult> GetPosts(int page, int pageSize)
     {
         try
         {
             var result = await this.photoService.GetPosts(page, pageSize);
                                                  
+            return Ok(result);
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex.Message);
+        }
+    }
+    [HttpGet("getUsersPosts/{page}/{pageSize}/{lastName}")]
+    public async Task<IActionResult> GetUsersPosts(int page, int pageSize, string lastName)
+    {
+        try
+        {
+            var result = await this.photoService.GetUsersPosts(page, pageSize, lastName);
+
             return Ok(result);
         }
         catch (Exception ex)
@@ -52,6 +66,21 @@ public class PhotoController : ControllerBase
             await CheckRole();
 
             return Ok(await this.photoService.UpdateEntityAsync(photo));
+        }
+        catch (Exception e)
+        {
+            return BadRequest(e.Message);
+        }
+    }
+
+    [HttpGet("top10Posts")]
+    public async Task<IActionResult> GetTop10Posts()
+    {
+        try
+        {
+            var result = await this.photoService.GetTop10Posts();
+
+            return Ok(result);
         }
         catch (Exception e)
         {

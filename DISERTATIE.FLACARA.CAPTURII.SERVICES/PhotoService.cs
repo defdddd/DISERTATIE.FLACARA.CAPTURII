@@ -51,10 +51,32 @@ public class PhotoService : IPhotoService
         var photos = await _repositories.PhotoRepository.GetAllAsync();
         return _mapper.Map<List<PhotoDTO>>(photos);
     }
+    public async Task<List<PhotoDTO>> GetUsersPosts(int page, int pageSize, string lastName)
+    {
+        var result = await this.EntitiesWithPagination(page, pageSize, lastName);
+
+        foreach (var photo in result)
+        {
+            var reviews = await this._repositories.ReviewRepository.GetByPhotoId(photo.Id.GetValueOrDefault());
+            var comments = await this._repositories.CommentRepository.GetByPhotoId(photo.Id.GetValueOrDefault());
+
+            photo.Comments = _mapper.Map<List<CommentDTO>>(comments);
+            photo.Reviews = _mapper.Map<List<ReviewDTO>>(reviews);
+        }
+
+        return result;
+    }
 
     public async Task<List<PhotoDTO>> EntitiesWithPagination(int page, int pageSize)
     {
         var photos = await _repositories.PhotoRepository.GetPagedData(page, pageSize);
+
+        return _mapper.Map<List<PhotoDTO>>(photos);
+    }
+
+    public async Task<List<PhotoDTO>> EntitiesWithPagination(int page, int pageSize, string lastName)
+    {
+        var photos = await _repositories.PhotoRepository.GetPagedData(page, pageSize, lastName);
 
         return _mapper.Map<List<PhotoDTO>>(photos);
     }
@@ -74,6 +96,22 @@ public class PhotoService : IPhotoService
 
         return result;
     }
+
+    public async Task<dynamic> GetTop10Posts()
+    {
+        var result = (await _repositories.PhotoRepository.GetTop10Posts())
+            .Select(x =>
+            new
+            {
+                Id = x.PhotoId,
+                URL = x.PhotoURL,
+                AverageGrade = x.AverageGrade,
+            });
+
+
+        return result.ToList();
+    }
+
 
     public async Task<PhotoDTO> InsertEntityAsync(PhotoDTO value)
     {

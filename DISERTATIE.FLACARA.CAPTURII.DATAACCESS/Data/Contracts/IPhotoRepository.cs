@@ -5,4 +5,7 @@ namespace DISERTATIE.FLACARA.CAPTURII.DATAACCESS.Data.Contracts;
 
 public interface IPhotoRepository : IRepository<Photo>
 {
+    Task<List<dynamic>> GetTop10Posts();
+    Task<List<Photo>> GetPagedData(int pageNumber, int pageSize, string lastName);
+
 }
