@@ -162,7 +162,15 @@ public class PhotoService : IPhotoService
     public async Task<PhotoDTO> SearchEntityByIdAsync(int id)
     {
         var photoDto = await _repositories.PhotoRepository.SearchByIdAsync(id);
-        return _mapper.Map<PhotoDTO>(photoDto);
+
+        var reviews = await _repositories.ReviewRepository.GetByPhotoId(id);
+        var comments = await _repositories.CommentRepository.GetByPhotoId(id);
+
+        var result = _mapper.Map<PhotoDTO>(photoDto);
+        result.Comments = _mapper.Map<List<CommentDTO>>(comments);
+        result.Reviews = _mapper.Map<List<ReviewDTO>>(reviews);
+
+        return result;
     }
 
     public async Task<PhotoDTO> UpdateEntityAsync(PhotoDTO value)

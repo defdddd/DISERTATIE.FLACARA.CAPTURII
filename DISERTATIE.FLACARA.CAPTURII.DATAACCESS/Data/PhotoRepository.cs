@@ -24,7 +24,7 @@ public class PhotoRepository : Repository<Photo>, IPhotoRepository
             SELECT p.*
             FROM table_Photos p
             JOIN table_Users u ON p.UserId = u.Id
-            WHERE u.LastName = {lastName}
+            WHERE u.LastName = '{lastName}'
             ORDER BY p.Id
             OFFSET {(pageNumber - 1) * pageSize} ROWS
             FETCH NEXT {pageSize} ROWS ONLY;";

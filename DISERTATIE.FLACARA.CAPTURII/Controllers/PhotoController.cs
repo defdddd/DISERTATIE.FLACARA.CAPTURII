@@ -5,7 +5,13 @@ using DISERTATIE.FLACARA.CAPTURII.SERVICES;
 using DISERTATIE.FLACARA.CAPTURII.SERVICES.Contracts;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 using Newtonsoft.Json;
+using System.Drawing.Drawing2D;
+using System.Drawing.Imaging;
+using System.Drawing;
+using System.Drawing.Printing;
+using System.Security.Claims;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -56,6 +62,24 @@ public class PhotoController : ControllerBase
             return BadRequest(ex.Message);
         }
     }
+
+    [HttpGet("{id}")]
+    [Authorize(Roles = "Admin,User,Photograhper")]
+
+    public async Task<IActionResult> GetById(int id)
+    {
+        try
+        {
+            return Ok(await this.photoService.SearchEntityByIdAsync(id));   
+        }
+        catch (Exception e)
+        {
+            return BadRequest(e.Message);
+        }
+    }
+
+
+
     [HttpPut("update")]
     [Authorize(Roles = "Admin,User,Photographer")]
 
@@ -179,17 +203,6 @@ public class PhotoController : ControllerBase
         }
     }
 
-    private async Task SavePicture(string path, IFormFile file)
-    {
-        Directory.CreateDirectory(path);
-
-        using var fileStream = System.IO.File.Create(path + file.FileName);
-
-        await file.CopyToAsync(fileStream);
-
-        await fileStream.FlushAsync();
-    }
-
     private List<string> GetPicturesListAsync(string type, int id)
     {
         var location = $"/Images/{id}/{type}/";
@@ -208,5 +221,65 @@ public class PhotoController : ControllerBase
     {
 
     }
+
+
+    private async Task SavePicture(string path, IFormFile file, int width = 1920, int height = 1080, int quality = 75)
+    {
+        // Creează directorul dacă nu există
+        Directory.CreateDirectory(path);
+
+        // Crează calea completă pentru fișier
+        var filePath = Path.Combine(path, file.FileName);
+
+        using (var stream = new MemoryStream())
+        {
+            // Copiază conținutul fișierului în MemoryStream
+            await file.CopyToAsync(stream);
+
+            // Crează imaginea din stream
+            var srcImage = Image.FromStream(stream);
+
+            // Redimensionează imaginea
+            var resizedImage = ResizeImage(srcImage, width, height);
+
+            // Salvează imaginea redimensionată cu calitatea specificată
+            SaveJpeg(filePath, resizedImage, quality);
+        }
+    }
+
+    private static Image ResizeImage(Image srcImage, int width, int height)
+    {
+        var destRect = new Rectangle(0, 0, width, height);
+        var destImage = new Bitmap(width, height);
+
+        destImage.SetResolution(srcImage.HorizontalResolution, srcImage.VerticalResolution);
+
+        using (var graphics = Graphics.FromImage(destImage))
+        {
+            graphics.CompositingMode = CompositingMode.SourceCopy;
+            graphics.CompositingQuality = CompositingQuality.HighQuality;
+            graphics.InterpolationMode = InterpolationMode.HighQualityBicubic;
+            graphics.SmoothingMode = SmoothingMode.HighQuality;
+            graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
+
+            using (var wrapMode = new ImageAttributes())
+            {
+                wrapMode.SetWrapMode(WrapMode.TileFlipXY);
+                graphics.DrawImage(srcImage, destRect, 0, 0, srcImage.Width, srcImage.Height, GraphicsUnit.Pixel, wrapMode);
+            }
+        }
+
+        return destImage;
+    }
+
+    private static void SaveJpeg(string path, Image image, int quality)
+    {
+        var encoder = ImageCodecInfo.GetImageDecoders().FirstOrDefault(c => c.FormatID == ImageFormat.Jpeg.Guid);
+        var encoderParameters = new EncoderParameters(1);
+        encoderParameters.Param[0] = new EncoderParameter(Encoder.Quality, quality);
+        image.Save(path, encoder, encoderParameters);
+    }
+
+
     #endregion
 }
