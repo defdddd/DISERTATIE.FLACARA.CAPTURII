@@ -9,6 +9,8 @@ using DISERTATIE.FLACARA.CAPTURII.VALIDATORS.DTO.Validation;
 using Microsoft.IdentityModel.Tokens;
 using System.ComponentModel.DataAnnotations;
 using System.IdentityModel.Tokens.Jwt;
+using System.Net.Mail;
+using System.Net;
 using System.Reflection.Metadata.Ecma335;
 using System.Security.Claims;
 using System.Text;
@@ -20,6 +22,7 @@ public class ServiceAuthentication : IServiceAuthentification
     private readonly IDataFactory _repositories;
     private readonly string _myKey;
     private readonly IMapper _mapper;
+    private static IDictionary<int, string> emailsKes = new Dictionary<int, string>();
 
     public ServiceAuthentication(IDataFactory repositories, string myKey, IMapper mapper)
     {
@@ -28,14 +31,34 @@ public class ServiceAuthentication : IServiceAuthentification
         _mapper = mapper;
 
     }
-    private async Task<bool> CheckEmailAsync(string email)
+  
+    public async Task SendEmail(int id)
     {
-        return (await _repositories.UserRepository.FirstOrDefaultAsync(x => x.Email == email)) != null;
+        var user = await _repositories.UserRepository.SearchByIdAsync(id);
+
+        this.SendEmail(user.Id, user.Email);
     }
 
-    private async Task<bool> CheckUserNameAsync(string userName)
+    public async Task<bool> CheckKey(string key, int userId)
     {
-        return await _repositories.UserRepository.FirstOrDefaultAsync(x => x.UserName == userName) != null;
+        var user = await _repositories.UserRepository.SearchByIdAsync(userId);
+
+        if (emailsKes.ContainsKey(userId))
+        {
+            if(emailsKes[userId] == key)
+            {
+                user.Status = Status.Confirmed;
+                
+                var result = await _repositories.UserRepository.UpdateAsync(user);
+
+                if(result?.Status == Status.Confirmed)
+                {
+                    return true;
+                }
+            }     
+        }
+
+        return false;
     }
 
     public async Task<dynamic> GenerateTokenAsync(string userName, string password)
@@ -51,6 +74,7 @@ public class ServiceAuthentication : IServiceAuthentification
         {
             new ("Identifier", user.Id.ToString()),
             new (ClaimTypes.Role, user.Role.ToString()),
+            new ("Status", user.Status.ToString()),
             new (JwtRegisteredClaimNames.Nbf, new DateTimeOffset(DateTime.Now).ToUnixTimeSeconds().ToString()),
             new (JwtRegisteredClaimNames.Exp, new DateTimeOffset(DateTime.Now.AddDays(7)).ToUnixTimeSeconds().ToString())
         };
@@ -95,5 +119,55 @@ public class ServiceAuthentication : IServiceAuthentification
         var result = _mapper.Map<User>(user);
 
         return _mapper.Map<UserDTO>(await _repositories.UserRepository.InsertAsync(result));
+    }
+
+
+    private string GenerateRandomCode(int length)
+    {
+        string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+        StringBuilder result = new StringBuilder(length);
+        Random random = new Random();
+
+        for (int i = 0; i < length; i++)
+        {
+            result.Append(chars[random.Next(chars.Length)]);
+        }
+
+        return result.ToString();
+    }
+
+    private async Task<bool> CheckEmailAsync(string email)
+    {
+        return (await _repositories.UserRepository.FirstOrDefaultAsync(x => x.Email == email)) != null;
+    }
+
+    private async Task<bool> CheckUserNameAsync(string userName)
+    {
+        return await _repositories.UserRepository.FirstOrDefaultAsync(x => x.UserName == userName) != null;
+    }
+
+    private void SendEmail(int userId, string email)
+    {
+        var code = GenerateRandomCode(8);
+
+        MailMessage mail = new MailMessage();
+        mail.From = new MailAddress("photobookds@outlook.com");
+        mail.To.Add(email);
+        mail.Subject = "Validation code";
+        mail.Body = "Validation code: " + code;
+
+        SmtpClient smtpServer = new SmtpClient("smtp.office365.com");
+        smtpServer.Port = 587;
+        smtpServer.Credentials = new NetworkCredential("photobookds@outlook.com", "M4rinic4#");
+        smtpServer.EnableSsl = true;
+
+        smtpServer.Send(mail);
+
+        if (emailsKes.ContainsKey(userId))
+        {
+            emailsKes.Remove(userId);
+        }
+
+        emailsKes.Add(userId, code);
     }
 }

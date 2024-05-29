@@ -11,4 +11,6 @@ public interface IServiceAuthentification
 {
     Task<dynamic> GenerateTokenAsync(string userName, string password);
     Task<UserDTO> RegisterAsync(UserDTO user);
+    Task SendEmail(int id);
+    Task<bool> CheckKey(string key, int userId);
 }

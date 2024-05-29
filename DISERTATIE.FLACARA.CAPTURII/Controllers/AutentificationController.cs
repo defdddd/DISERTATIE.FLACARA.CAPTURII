@@ -44,4 +44,33 @@ public class AutentificationController : ControllerBase
             return BadRequest(e.Message);
         }
     }
+
+    [HttpPost("sendEmail/{userId}")]
+    public async Task<IActionResult> SendEmail(int userId)
+    {
+        try
+        {
+            await _authService.SendEmail(userId);
+
+            return Ok(true);
+        }
+        catch (Exception e)
+        {
+            return BadRequest(e.Message);
+        }
+    }
+
+    [HttpPost("checkCode/{userId}/{key}")]
+    public async Task<IActionResult> CheckKey(int userId, string key)
+    {
+        try
+        {
+            return Ok(await _authService.CheckKey(key, userId));
+        }
+        catch (Exception e)
+        {
+            return BadRequest(e.Message);
+        }
+    }
+
 }
