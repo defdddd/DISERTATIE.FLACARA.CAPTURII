@@ -22,7 +22,7 @@ public class ServiceAuthentication : IServiceAuthentification
     private readonly IDataFactory _repositories;
     private readonly string _myKey;
     private readonly IMapper _mapper;
-    private static IDictionary<int, string> emailsKes = new Dictionary<int, string>();
+    private static IDictionary<int, string> emailKeys = new Dictionary<int, string>();
 
     public ServiceAuthentication(IDataFactory repositories, string myKey, IMapper mapper)
     {
@@ -43,9 +43,9 @@ public class ServiceAuthentication : IServiceAuthentification
     {
         var user = await _repositories.UserRepository.SearchByIdAsync(userId);
 
-        if (emailsKes.ContainsKey(userId))
+        if (emailKeys.ContainsKey(userId))
         {
-            if(emailsKes[userId] == key)
+            if(emailKeys[userId] == key)
             {
                 user.Status = Status.Confirmed;
                 
@@ -163,11 +163,11 @@ public class ServiceAuthentication : IServiceAuthentification
 
         smtpServer.Send(mail);
 
-        if (emailsKes.ContainsKey(userId))
+        if (emailKeys.ContainsKey(userId))
         {
-            emailsKes.Remove(userId);
+            emailKeys.Remove(userId);
         }
 
-        emailsKes.Add(userId, code);
+        emailKeys.Add(userId, code);
     }
 }

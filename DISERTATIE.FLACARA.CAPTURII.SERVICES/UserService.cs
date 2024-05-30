@@ -108,9 +108,50 @@ public class UserService : IUserService
 
     public async Task<UserProfileDTO> FirstOrDefaultAsync(int userId)
     {
-        var result = await _repositories.UserRepository.FirstOrDefaultAsync(x => x.Id == userId);
+        var result = await _repositories.UserRepository.SearchByIdAsync(userId);
+
+        await UpdateUserRole(result);
 
         return _mapper.Map<UserProfileDTO>(result);
+    }
+
+    private async Task UpdateUserRole(User result)
+    {
+        var rank = await UserRankStatus(result.Id);
+
+        var avg = rank.AverageGrade;
+        var totalPhotos = rank.TotalPhotos;
+
+        if(result.Role == Role.User)
+        {
+            if(avg > 3.5 && totalPhotos >= 3)
+            {
+                result.Role = Role.Photographer;
+
+                await _repositories.UserRepository.UpdateAsync(result);
+            }
+        }
+
+    }
+
+    public async Task<dynamic> UserRankStatus(int userId)
+    {
+        var rank = await _repositories.UserRepository.UserRankStatus(userId);
+
+        var avg = 0;
+        var totalPhotos = 0;
+
+        if (rank != null)
+        {
+            avg = rank.AverageGrade;
+            totalPhotos = rank.TotalPhotos;
+        }
+
+        return new
+        {
+            AverageGrade = avg,
+            TotalPhotos = totalPhotos
+        };
     }
 
     public async Task<dynamic> GetTop10Users()

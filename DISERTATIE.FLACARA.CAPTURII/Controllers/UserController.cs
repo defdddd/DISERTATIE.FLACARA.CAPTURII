@@ -144,6 +144,24 @@ public class UserController : ControllerBase
         }
     }
 
+
+    [HttpGet("rankStatus/{userId}")]
+    [Authorize(Roles = "Admin,User,Photograhper")]
+
+    public async Task<IActionResult> RankStatus(int userId)
+    {
+        try
+        {
+            var result = await _userService.UserRankStatus(userId);
+
+            return Ok(result);
+        }
+        catch (Exception e)
+        {
+            return BadRequest(e.Message);
+        }
+    }
+
     [HttpGet("top10Users")]
     public async Task<IActionResult> GetTop10Users()
     {

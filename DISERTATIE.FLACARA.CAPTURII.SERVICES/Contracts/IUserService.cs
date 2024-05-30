@@ -1,4 +1,5 @@
-﻿using DISERTATIE.FLACARA.CAPTURII.DTO.DomainsDTO;
+﻿using DISERTATIE.FLACARA.CAPTURII.DATAACCESS.Data.Domains;
+using DISERTATIE.FLACARA.CAPTURII.DTO.DomainsDTO;
 using DISERTATIE.FLACARA.CAPTURII.DTO.EntityDTO;
 using System;
 using System.Collections.Generic;
@@ -14,4 +15,5 @@ public interface IUserService : IBaseService<UserDTO>
     Task<UserProfileDTO> FirstOrDefaultAsync(int userId);
     Task<UserDTO> SearchByUserNameAsync(string userName);
     Task<object> GetTop10Users();
+    Task<dynamic> UserRankStatus(int userId);
 }

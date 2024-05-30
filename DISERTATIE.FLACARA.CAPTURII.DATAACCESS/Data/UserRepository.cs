@@ -28,4 +28,31 @@ public class UserRepository : Repository<User>, IUserRepository
         return entities.ToList();
     }
 
+    public async Task<dynamic?> UserRankStatus(int id)
+    {
+        var sql = $@"SELECT 
+                    u.Id, 
+                    u.UserName, 
+                    AVG(r.Grade) AS AverageGrade, 
+                    COUNT(DISTINCT p.Id) AS TotalPhotos
+                    FROM 
+                        table_Users u
+                    JOIN 
+                        table_Photos p ON u.Id = p.UserId
+                    JOIN 
+                        table_Reviews r ON p.Id = r.PhotoId
+                    WHERE 
+                        u.Id = {id}
+                    GROUP BY 
+                        u.Id, 
+                        u.UserName;";
+
+        using var connection = new SqlConnection(sqlDataAccess.Connection);
+
+        connection.Open();
+
+        var entities = await connection.QueryFirstOrDefaultAsync<dynamic>(sql) ?? null;
+
+        return entities;
+    }
 }
