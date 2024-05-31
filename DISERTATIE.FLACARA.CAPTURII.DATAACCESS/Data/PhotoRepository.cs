@@ -4,6 +4,8 @@ using DISERTATIE.FLACARA.CAPTURII.DATAACCESS.Data.Contracts;
 using DISERTATIE.FLACARA.CAPTURII.DATAACCESS.Data.Domains;
 using DISERTATIE.FLACARA.CAPTURII.DATAACCESS.Data.Repository;
 using System.Data.SqlClient;
+using System.Runtime.Intrinsics.X86;
+using System.Text.RegularExpressions;
 
 namespace DISERTATIE.FLACARA.CAPTURII.DATAACCESS.Data;
 
@@ -47,4 +49,42 @@ public class PhotoRepository : Repository<Photo>, IPhotoRepository
         return entities.ToList();
     }
 
+    public async Task<List<dynamic>> GetTop10UsersPosts(int userId)
+    {
+        var sql = $@"SELECT TOP 10
+                            p.Id,
+                            p.UserId,
+                            p.URL,
+                            p.Type,
+                            p.IsPublic,
+                            p.FileName,
+                            p.Description,
+                            AVG(COALESCE(r.Grade, 0)) AS AverageGrade,
+                            COUNT(DISTINCT r.Id) AS NumberOfReviews,
+                            COUNT(DISTINCT c.Id) AS NumberOfComments
+                        FROM 
+                            table_Photos p
+                        LEFT JOIN 
+                            table_Reviews r ON p.Id = r.PhotoId
+                        LEFT JOIN 
+                            table_Comments c ON p.Id = c.PhotoId
+                        WHERE 
+                            p.UserId = {userId}
+                        GROUP BY 
+                            p.Id, p.UserId, p.URL, p.Type, p.IsPublic, p.FileName, p.Description
+                        ORDER BY 
+                            AverageGrade DESC
+";
+
+        using var connection = new SqlConnection(sqlDataAccess.Connection);
+
+        connection.Open();
+
+        var entities = await connection.QueryAsync<dynamic>(sql) ?? Enumerable.Empty<dynamic>();
+
+        return entities.ToList();
+    }
+
+
+    
 }

@@ -16,4 +16,5 @@ public record UserDTO : RegisterUserDTO
     public Gender Gender { get; set; }
     public Status Status { get; set; }
     public Role Role { get; set; }
+    public string? Description { get; set; }
 }

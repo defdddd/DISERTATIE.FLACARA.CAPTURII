@@ -105,11 +105,33 @@ public class PhotoService : IPhotoService
             {
                 Id = x.PhotoId,
                 URL = x.PhotoURL,
-                AverageGrade = x.AverageGrade,
+                AverageGrade = Math.Round(x.AverageGrade, 2),
             });
 
 
         return result.ToList();
+    }
+
+
+    public async Task<dynamic> GetTop10UsersPosts(int userId)
+    {
+        var result = (await _repositories.PhotoRepository.GetTop10UsersPosts(userId))
+            .Select(x =>
+               new {
+                   x.Id,
+                   x.UserId,
+                   x.URL,
+                   x.Type,
+                   x.IsPublic,
+                   x.FileName,
+                   x.Description,
+                   AverageGrade = Math.Round(x.AverageGrade, 2),
+                   x.NumberOfReviews,
+                   x.NumberOfComments
+               });
+
+
+        return result;
     }
 
 

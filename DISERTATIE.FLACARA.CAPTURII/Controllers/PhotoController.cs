@@ -183,6 +183,22 @@ public class PhotoController : ControllerBase
         }
     }
 
+
+    [HttpGet("top10UsersPosts/{userId}")]
+    public async Task<IActionResult> GetTop10UsersPosts(int userId)
+    {
+        try
+        {
+            var result = await this.photoService.GetTop10UsersPosts(userId);
+
+            return Ok(result);
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex.Message);
+        }
+    }
+
     [HttpDelete("{id}")]
     [Authorize(Roles = "Admin,User,Photographer")]
     public async Task<IActionResult> DeleteFile(int id)

@@ -20,6 +20,7 @@ internal static class UserUserDTO
             FirstName = user.FirstName,
             LastName = user.LastName,
             ProfilePicture = user.ProfilePicture,
+            Description = user.Description,
             City = user.City,
             Gender = user.Gender,
             Status = user.Status,

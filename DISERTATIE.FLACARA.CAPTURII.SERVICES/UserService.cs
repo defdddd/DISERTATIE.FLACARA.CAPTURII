@@ -119,7 +119,7 @@ public class UserService : IUserService
     {
         var rank = await UserRankStatus(result.Id);
 
-        var avg = rank.AverageGrade;
+        var avg = Math.Round(rank.AverageGrade, 2);
         var totalPhotos = rank.TotalPhotos;
 
         if(result.Role == Role.User)
@@ -138,8 +138,8 @@ public class UserService : IUserService
     {
         var rank = await _repositories.UserRepository.UserRankStatus(userId);
 
-        var avg = 0;
-        var totalPhotos = 0;
+        double avg = 0;
+        double totalPhotos = 0;
 
         if (rank != null)
         {
@@ -149,7 +149,7 @@ public class UserService : IUserService
 
         return new
         {
-            AverageGrade = avg,
+            AverageGrade = Math.Round(avg, 2),
             TotalPhotos = totalPhotos
         };
     }
@@ -161,7 +161,7 @@ public class UserService : IUserService
             new
             {
                 User = GetUserProfileFromUserId(x.Id),
-                AverageGrade = x.AverageGrade,
+                AverageGrade = Math.Round(x.AverageGrade, 2),
                 Photos = x.TotalPhotos
             });
 
