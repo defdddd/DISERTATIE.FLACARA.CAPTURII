@@ -41,7 +41,6 @@ public class FolderController : ControllerBase
     }
 
     [HttpGet("myFoldersWithPhotos")]
-    [Authorize(Roles = "Admin,User")]
 
     public async Task<IActionResult> GetMyFoldersWithPhotos()
     {
@@ -58,7 +57,6 @@ public class FolderController : ControllerBase
     }
 
     [HttpPost("insert")]
-    [Authorize(Roles = "Admin,User")]
 
     public async Task<IActionResult> Insert([FromBody] FolderDTO folder)
     {
@@ -85,7 +83,6 @@ public class FolderController : ControllerBase
     }
 
     [HttpPut("update")]
-    [Authorize(Roles = "Admin,User")]
 
     public async Task<IActionResult> Update([FromBody] FolderDTO folder)
     {
@@ -102,7 +99,6 @@ public class FolderController : ControllerBase
     }
 
     [HttpDelete("{id}")]
-    [Authorize(Roles = "Admin,User")]
 
     public async Task<IActionResult> Delete(int id)
     {

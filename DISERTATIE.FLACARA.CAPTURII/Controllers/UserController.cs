@@ -69,7 +69,6 @@ public class UserController : ControllerBase
         }
     }
     [HttpGet("{id}")]
-    [Authorize(Roles = "Admin,User,Photograhper")]
 
     public async Task<IActionResult> GetById(int id)
     {
@@ -78,11 +77,7 @@ public class UserController : ControllerBase
             var userId = int.Parse(User.FindFirst("Identifier")?.Value);
             var role = User.FindFirst(ClaimTypes.Role)?.Value;
 
-            if (userId == id || role == "Admin")
-            {
-                return Ok(await _userService.SearchEntityByIdAsync(id));
-            }
-            return BadRequest("Unauthorized");
+            return Ok(await _userService.SearchEntityByIdAsync(id));
         }
         catch (Exception e)
         {
@@ -126,7 +121,7 @@ public class UserController : ControllerBase
     }
 
     [HttpGet("myProfile")]
-    [Authorize(Roles = "Admin,User,Photograhper")]
+
 
     public async Task<IActionResult> GetMyData()
     {
@@ -146,7 +141,7 @@ public class UserController : ControllerBase
 
 
     [HttpGet("rankStatus/{userId}")]
-    [Authorize(Roles = "Admin,User,Photograhper")]
+
 
     public async Task<IActionResult> RankStatus(int userId)
     {

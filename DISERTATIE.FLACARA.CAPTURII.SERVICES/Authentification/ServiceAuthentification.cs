@@ -121,7 +121,6 @@ public class ServiceAuthentication : IServiceAuthentification
         return _mapper.Map<UserDTO>(await _repositories.UserRepository.InsertAsync(result));
     }
 
-
     private string GenerateRandomCode(int length)
     {
         string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";

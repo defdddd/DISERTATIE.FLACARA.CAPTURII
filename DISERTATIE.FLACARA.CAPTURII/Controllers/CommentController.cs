@@ -38,7 +38,6 @@ public class CommentController : ControllerBase
     }
 
     [HttpPost("insert")]
-    [Authorize(Roles = "Admin,User")]
 
     public async Task<IActionResult> Insert([FromBody] CommentDTO comment)
     {
@@ -53,7 +52,6 @@ public class CommentController : ControllerBase
     }
 
     [HttpPut("update")]
-    [Authorize(Roles = "Admin,User")]
 
     public async Task<IActionResult> Update([FromBody] CommentDTO comment)
     {
@@ -70,7 +68,6 @@ public class CommentController : ControllerBase
     }
 
     [HttpDelete("{id}")]
-    [Authorize(Roles = "Admin,User")]
 
     public async Task<IActionResult> Delete(int id)
     {

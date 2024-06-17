@@ -64,7 +64,6 @@ public class PhotoController : ControllerBase
     }
 
     [HttpGet("{id}")]
-    [Authorize(Roles = "Admin,User,Photograhper")]
 
     public async Task<IActionResult> GetById(int id)
     {
@@ -81,7 +80,6 @@ public class PhotoController : ControllerBase
 
 
     [HttpPut("update")]
-    [Authorize(Roles = "Admin,User,Photographer")]
 
     public async Task<IActionResult> Update([FromBody] PhotoDTO photo)
     {

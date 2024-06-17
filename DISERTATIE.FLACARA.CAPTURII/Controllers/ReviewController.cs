@@ -34,7 +34,6 @@ public class ReviewController : ControllerBase
     }
 
     [HttpPost("insert")]
-    [Authorize(Roles = "Admin,User")]
 
     public async Task<IActionResult> Insert([FromBody] ReviewDTO review)
     {
@@ -49,7 +48,6 @@ public class ReviewController : ControllerBase
     }
 
     [HttpPut("update")]
-    [Authorize(Roles = "Admin,User")]
 
     public async Task<IActionResult> Update([FromBody] ReviewDTO review)
     {
@@ -66,7 +64,6 @@ public class ReviewController : ControllerBase
     }
 
     [HttpDelete("{id}")]
-    [Authorize(Roles = "Admin,User")]
 
     public async Task<IActionResult> Delete(int id)
     {
