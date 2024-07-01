@@ -118,6 +118,8 @@ public class ServiceAuthentication : IServiceAuthentification
 
         var result = _mapper.Map<User>(user);
 
+        this.SendRegistrationEmail(result.Email);
+
         return _mapper.Map<UserDTO>(await _repositories.UserRepository.InsertAsync(result));
     }
 
@@ -168,5 +170,24 @@ public class ServiceAuthentication : IServiceAuthentification
         }
 
         emailKeys.Add(userId, code);
+    }
+
+    private void SendRegistrationEmail(string email)
+    {
+
+        MailMessage mail = new MailMessage();
+        mail.From = new MailAddress("photobookds@outlook.com");
+        mail.To.Add(email);
+        mail.Subject = "Registration";
+        mail.Body = "Registration successful. Please log in and use the provided code to fully activate your account.";
+
+        SmtpClient smtpServer = new SmtpClient("smtp.office365.com");
+        smtpServer.Port = 587;
+        smtpServer.Credentials = new NetworkCredential("photobookds@outlook.com", "M4rinic4#");
+        smtpServer.EnableSsl = true;
+
+        smtpServer.Send(mail);
+
+      
     }
 }
