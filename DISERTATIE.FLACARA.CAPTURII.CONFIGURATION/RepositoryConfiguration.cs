@@ -3,7 +3,7 @@ using DISERTATIE.FLACARA.CAPTURII.DATAACCESS.Factory;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 namespace DISERTATIE.FLACARA.CAPTURII.CONFIGURATION;
-
+///
 public static class RepositoryConfiguration
 {
     public static IServiceCollection AddRepositoryConfiguration(this IServiceCollection services, IConfiguration config)
