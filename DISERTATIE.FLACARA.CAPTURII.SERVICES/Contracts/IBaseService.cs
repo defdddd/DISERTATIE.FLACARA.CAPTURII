@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
+///
 namespace DISERTATIE.FLACARA.CAPTURII.SERVICES.Contracts;
 
 public interface IBaseService<T> where T : class
